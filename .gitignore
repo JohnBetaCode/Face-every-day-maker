@@ -1,3 +1,17 @@
+
+# ------------------------------------------
+# Ignore images
+*.jpg
+*.png
+
+# Ignore videos
+*.mp4
+*.avi
+
+# Ignore images in media folder
+dev_ws/media/images/*
+
+# ------------------------------------------
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
