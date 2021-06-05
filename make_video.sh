@@ -8,7 +8,7 @@ source "${PWD%}/dev_ws/configs/env_vars.sh"
 
 # -----------------------------------------------------------------------
 # create local files
-FACE_PREDICTO_FILE_PATH=${PWD%}/dev_ws/configs/shape_predictor_68_face_landmarks.dat
+FACE_PREDICTO_FILE_PATH=${PWD%}/dev_ws/configs/predictor_landmarks.dat
 if test -f "$FACE_PREDICTO_FILE_PATH"; then
     echo "face landmarks file $FACE_PREDICTO_FILE_PATH already exists in configs"
 else
