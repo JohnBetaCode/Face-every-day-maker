@@ -1,4 +1,3 @@
-[submodule "dev_ws/src/face_feature"]
-	path = dev_ws/src/face_feature
+[submodule "dev_ws/src/facial_features"]
+	path = dev_ws/src/facial_features
 	url = https://github.com/raviranjan0309/Detect-Facial-Features
-	
