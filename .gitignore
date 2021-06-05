@@ -8,6 +8,9 @@
 *.mp4
 *.avi
 
+# Ignore heavy files
+*.dat
+
 # Ignore images in media folder
 dev_ws/media/images/*
 
