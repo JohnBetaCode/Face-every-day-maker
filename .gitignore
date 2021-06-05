@@ -10,6 +10,7 @@
 
 # Ignore heavy files
 *.dat
+dev_ws/configs/shape_predictor_68_face_landmarks.dat
 
 # Ignore images in media folder
 dev_ws/media/images/*
