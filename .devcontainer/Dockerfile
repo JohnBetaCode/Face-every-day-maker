@@ -184,7 +184,8 @@ RUN  \
 RUN pip3 install -U pip \
     black~=20.8b \
     dlib==19.22.0 \
-    imutils==0.5.4
+    imutils==0.5.4 \
+    tqdm
 
 # Add System dependencies in here
 RUN \

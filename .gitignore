@@ -14,7 +14,9 @@ dev_ws/configs/shape_predictor_68_face_landmarks.dat
 
 # Ignore images in media folder
 dev_ws/media/images/*
+dev_ws/export/*
 
+core
 # ------------------------------------------
 # Byte-compiled / optimized / DLL files
 __pycache__/
