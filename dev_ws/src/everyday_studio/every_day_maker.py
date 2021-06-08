@@ -136,7 +136,8 @@ class DataSet:
 
         # go to the first index of the dataset
         if len(self.data_values):
-            self.goto_idx(idx=0)
+            self.idx = len(self.data_values) - 1
+            self.goto_idx(idx=self.idx)
 
     def __str__(self):
         """!
@@ -348,6 +349,7 @@ class Studio:
                     dst_path=f"{self._EXPORT_PATH}/{self._EXPORT_VIDEO_NAME}.mp4",
                 )
                 os.system(merge_audio_command)
+                os.remove(self._video_capture.file_dir)
             else:
                 printlog(
                     msg=f"no audio source {audio_src} in {self._MEDIA_PATH}",
@@ -360,8 +362,12 @@ class Studio:
         self.dataset.goto_idx(idx=current_idx)
 
     @try_catch_log
-    def draw_visuals(self):
-        pass
+    def draw_visuals(self, img: np.array) -> np.array:
+        return img
+
+    @try_catch_log
+    def get_report(self) -> str:
+        return ""
 
     @property
     def shortcuts(self) -> str:
