@@ -179,7 +179,7 @@ class Studio:
                 os.getenv("CONFIGS_PATH"), os.getenv("PREDICTOR_NAME")
             )
         )
-        self._face = Face()
+        self.face = None
 
         # ---------------------------------------------------------------------
         # instancite of video capture/recorder
@@ -298,14 +298,38 @@ class Studio:
         print(self.shortcuts)
 
         while True:
+
+            try:
+                # Check that the current sample has data
+                if self.dataset.idx_img is not None and self.dataset.idx_img.isfile:
+
+                    # get current idx dataset image
+                    idx_img = self.dataset.idx_img.get_data(
+                        size=(self._VIDEO_WIDTH, self._VIDEO_HEIGHT)
+                    )
+
+                    # Inference with face detector and check for face in image
+                    self.face = self._face_detector.predict(img=idx_img)
+                    if self.face is None:
+                        printlog(
+                            msg="No face detected in image sample", msg_type="WARN"
+                        )
+                    else:
+                        idx_img = self._face_detector.visualize_landmarks(
+                            img=idx_img, face=self.face
+                        )
+                else:
+                    idx_img = np.zeros(
+                        (self._VIDEO_WIDTH, self._VIDEO_HEIGHT, 3), np.uint8
+                    )
+            except Exception as e:
+                printlog(msg=e, msg_type="ERROR")
+                idx_img = np.zeros((self._VIDEO_WIDTH, self._VIDEO_HEIGHT, 3), np.uint8)
+
             cv2.imshow(
                 self._WIN_NAME,
                 cv2.resize(
-                    self.dataset.idx_img.get_data(
-                        size=(self._VIDEO_WIDTH, self._VIDEO_HEIGHT)
-                    )
-                    if self.dataset.idx_img is not None
-                    else np.zeros((self._VIDEO_WIDTH, self._VIDEO_HEIGHT, 3), np.uint8),
+                    idx_img,
                     (self._WIN_WIDTH, self._WIN_HEIGHT),
                     int(cv2.INTER_NEAREST),
                 ),
