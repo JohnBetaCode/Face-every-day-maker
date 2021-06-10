@@ -12,12 +12,13 @@ import os
 
 import cv2
 import numpy as np
+import math
 
 from tqdm import tqdm
 from face import Face, FaceDetector
 from capture import VideoWriter
 from file_utils import Image, get_files_names, get_sub_folders
-from utils import printlog, try_catch_log
+from utils import printlog, try_catch_log, print_text_list
 
 
 # =============================================================================
@@ -165,6 +166,10 @@ class DataSet:
     def sub_folders_name(self) -> list:
         return self.data_files.keys() if self.data_files is not None else []
 
+    @property
+    def len(self) -> int:
+        return len(self.data_values)
+
 
 class Studio:
     def __init__(self) -> None:
@@ -174,6 +179,9 @@ class Studio:
 
         # ---------------------------------------------------------------------``
         # instancite face detector object
+        self._PREVISUALIZE_FACE_CORRECTION = int(
+            os.getenv("PREVISUALIZE_FACE_CORRECTION", default=1)
+        )
         self._face_detector = FaceDetector(
             predictor_path=os.path.join(
                 os.getenv("CONFIGS_PATH"), os.getenv("PREDICTOR_NAME")
@@ -205,6 +213,11 @@ class Studio:
         # video properties
         self._VIDEO_WIDTH = int(os.getenv("VIDEO_WIDTH", default=640))
         self._VIDEO_HEIGHT = int(os.getenv("VIDEO_HEIGHT", default=360))
+        self._VIDEO_EXPORT_GRAY = int(os.getenv("VIDEO_EXPORT_GRAY", default=1))
+        self._VIDEO_EXPORT_VISUALS = int(os.getenv("VIDEO_EXPORT_VISUALS", default=1))
+        self._VIDEO_EXPORT_PREVISUALIZATION = int(
+            os.getenv("VIDEO_EXPORT_PREVISUALIZATION", default=1)
+        )
 
         # Other constans and variables
         self._MEDIA_PATH = os.getenv("MEDIA_PATH")
@@ -318,6 +331,17 @@ class Studio:
                         idx_img = self._face_detector.visualize_landmarks(
                             img=idx_img, face=self.face
                         )
+                        if self._PREVISUALIZE_FACE_CORRECTION:
+                            cv2.imshow(
+                                f"{self._WIN_NAME}_FACE_CORRECTION",
+                                self.get_face_img_corrected(
+                                    img=self.dataset.idx_img.get_data(
+                                        size=(self._VIDEO_WIDTH, self._VIDEO_HEIGHT)
+                                    ),
+                                    face=self.face,
+                                    visuals=True,
+                                ),
+                            )
                 else:
                     idx_img = np.zeros(
                         (self._VIDEO_WIDTH, self._VIDEO_HEIGHT, 3), np.uint8
@@ -328,10 +352,12 @@ class Studio:
 
             cv2.imshow(
                 self._WIN_NAME,
-                cv2.resize(
-                    idx_img,
-                    (self._WIN_WIDTH, self._WIN_HEIGHT),
-                    int(cv2.INTER_NEAREST),
+                self.draw_visuals(
+                    img=cv2.resize(
+                        idx_img,
+                        (self._WIN_WIDTH, self._WIN_HEIGHT),
+                        int(cv2.INTER_NEAREST),
+                    )
                 ),
             )
             self.cb_key_event(key=cv2.waitKeyEx(self._WIN_TIME))
@@ -344,6 +370,13 @@ class Studio:
         @return _ 'None'
         """
 
+        if self._VIDEO_EXPORT_PREVISUALIZATION:
+            printlog(
+                msg="video exportation pre-visualization slow down the process",
+                msg_type="WARN",
+            )
+
+        # save current index for later return to it
         current_idx = self.dataset.idx
 
         # If there's no dataset
@@ -354,12 +387,73 @@ class Studio:
 
         # rocord every frame or video
         for idx_data in tqdm(range(len(self.dataset.data_values))):
-            self.dataset.goto_idx(idx=idx_data)
-            self._video_capture.write(
-                img=self.dataset.idx_img.get_data(
-                    size=(self._VIDEO_WIDTH, self._VIDEO_HEIGHT)
+
+            try:
+                # go to index
+                self.dataset.goto_idx(idx=idx_data)
+
+                # Check that the current sample has data
+                if self.dataset.idx_img is not None and self.dataset.idx_img.isfile:
+
+                    # get current idx dataset image
+                    idx_img = self.dataset.idx_img.get_data(
+                        size=(self._VIDEO_WIDTH, self._VIDEO_HEIGHT)
+                    )
+
+                    # Inference with face detector and check for face in image
+                    self.face = self._face_detector.predict(img=idx_img)
+                    if self.face is None:
+                        printlog(
+                            msg=f"skyping image {self.dataset.idx_img.name}, no face detected",
+                            msg_type="WARN",
+                        )
+                        continue
+                    else:
+                        idx_img = self._face_detector.visualize_landmarks(
+                            img=idx_img, face=self.face
+                        )
+                        idx_img = self.get_face_img_corrected(
+                            img=self.dataset.idx_img.get_data(
+                                size=(self._VIDEO_WIDTH, self._VIDEO_HEIGHT)
+                            ),
+                            face=self.face,
+                            visuals=self._VIDEO_EXPORT_VISUALS,
+                            exp_gray=self._VIDEO_EXPORT_GRAY,
+                        )
+                else:
+                    printlog(
+                        msg=f"skyping image {self.dataset.idx_img.name}, file no found",
+                        msg_type="WARN",
+                    )
+                    continue
+            except Exception as e:
+                printlog(
+                    msg=f"skyping image {self.dataset.idx_img.name}, error:{e}",
+                    msg_type="ERROR",
                 )
-            )
+                continue
+
+            self._video_capture.write(img=idx_img)
+            if self._VIDEO_EXPORT_PREVISUALIZATION:
+                cv2.imshow(
+                    f"{self._WIN_NAME}_FACE_CORRECTION",
+                    print_text_list(
+                        img=cv2.resize(
+                            idx_img,
+                            (self._WIN_WIDTH, self._WIN_HEIGHT),
+                            int(cv2.INTER_NEAREST),
+                        ),
+                        tex_list=["Exporting ...", "C: to cancel"],
+                        color=(0, 0, 255),
+                        orig=(10, 25),
+                        fontScale=0.7,
+                        y_jump=23,
+                    ),
+                )
+                if cv2.waitKey(10) in [69, 99]:
+                    printlog(msg="video creation process canceled", msg_type="WARN")
+                    self.dataset.goto_idx(idx=current_idx)
+                    return
 
         # concatenate audio
         audio_src = os.getenv("AUDIO_TRACK", default=None)
@@ -385,11 +479,97 @@ class Studio:
         # return to the previous index
         self.dataset.goto_idx(idx=current_idx)
 
-    @try_catch_log
     def draw_visuals(self, img: np.array) -> np.array:
+        """! draw studio visuals and data info in image
+        @param img 'np.array' image to draw visuals
+        @return img 'np.array' image with visuals drawn
+        """
+
+        img = print_text_list(
+            img=img,
+            tex_list=[
+                f"idx: {self.dataset.idx}/{self.dataset.len}",
+                f"file: {self.dataset.idx_img.name}.{self.dataset.idx_img.extension}",
+                f"date creation: {self.dataset.idx_img.created_date}",
+                f"date modified: {self.dataset.idx_img.modified_date}",
+                f"size: {self.dataset.idx_img.width}x{self.dataset.idx_img.height}x{self.dataset.idx_img.channels}",
+            ],
+            color=(255, 255, 255),
+            orig=(10, 25),
+            fontScale=0.5,
+            y_jump=23,
+        )
+
         return img
 
-    @try_catch_log
+    def get_face_img_corrected(
+        self, img: np.array, face: Face, exp_gray: bool = False, visuals: bool = False
+    ) -> np.array:
+        """!
+        Center and align a image respect to a face components
+        @param img 'np.array' image to center and align
+        @param face 'Face' face components to align image
+        @param exp_gray 'bool' export result in gray scale
+        @param visuals 'bool' print visuals in image result
+        @return img 'np.array' image centered and aligned respect with face
+        """
+
+        # ------------------------------------------------------------------
+        img = (
+            img
+            if not exp_gray
+            else cv2.cvtColor(cv2.cvtColor(img, cv2.COLOR_BGR2GRAY), cv2.COLOR_GRAY2BGR)
+        )
+
+        if visuals:
+            img = self._face_detector.visualize_landmarks(img=img, face=face)
+            cv2.line(
+                img,
+                tuple(face.left_eye[3]),
+                tuple(face.right_eye[0]),
+                (255, 255, 255),
+                1,
+            )
+
+        # ------------------------------------------------------------------
+        # Center and align image
+
+        dx = img.shape[1] // 2 - face.nose[2][0]
+        dy = img.shape[0] // 2 - face.nose[2][1]
+        cnt_pt = (img.shape[1] // 2, img.shape[0] // 2)
+        M = np.float32(
+            [
+                [1, 0, dx],
+                [0, 1, dy],
+            ]
+        )
+        img = cv2.warpAffine(img, M, (img.shape[1], img.shape[0]))
+
+        # ------------------------------------------------------------------
+        # Calculate angle to rate
+        angle = math.degrees(
+            math.atan2(
+                face.left_eye[3][1] - face.right_eye[0][1],
+                face.left_eye[3][0] - face.right_eye[0][0],
+            )
+        )
+
+        # Calculate resizing factor
+        len_scale = np.sqrt(
+            (face.left_eye[3][1] - face.right_eye[0][1]) ** 2
+            + (face.left_eye[3][0] - face.right_eye[0][0]) ** 2
+        )
+        scale = 1.0 + (1.0 - len_scale / 150.0)
+
+        # Find trans formation matrix
+        M = cv2.getRotationMatrix2D(center=cnt_pt, angle=angle, scale=scale)
+        img = cv2.warpAffine(img, M, (img.shape[1], img.shape[0]))
+
+        if visuals:
+            cv2.circle(img, (img.shape[1] // 2, img.shape[0] // 2), 1, (0, 0, 255), -1)
+
+        return img
+
     def get_report(self) -> str:
         return ""
 
@@ -415,7 +595,7 @@ class Studio:
 # =============================================================================
 
 # =============================================================================
-# MAIN FUNCTION - MAIN FUNCTION - MAIN FUNCTION - MA[-IN FUNCTION - MAIN FUNCTION
+# MAIN FUNCTION - MAIN FUNCTION - MAIN FUNCTION - MA[-IN FUNCTION - MAIN FUNCTI
 # IMPLEMENTATION EXAMPLE - IMPLEMENTATION EXAMPLE - IMPLEMENTATION EXAMPLE - IM
 # =============================================================================
 if __name__ == "__main__":

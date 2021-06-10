@@ -114,6 +114,8 @@ def print_text_list(
             lineType=cv2.LINE_AA,
         )
 
+    return img
+
 
 def print_text_list2(
     img, data_list: list, orig=(10, 25), fontScale: float = 0.7, y_jump: int = 30

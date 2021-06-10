@@ -19,7 +19,7 @@ class Face:
     def __init__(self, shape: list) -> None:
         """!
         Constructor for Face class instances
-        @param shape 'np.array' list of landmarks 
+        @param shape 'np.array' list of landmarks
             detections in face shape
         """
 
@@ -41,39 +41,39 @@ class Face:
         )
 
     @property
-    def mouth(self) -> list:
+    def mouth(self) -> tuple:
         (j, k) = self.FACIAL_LANDMARKS_INDEXES["Mouth"]
-        return self.shape[j:k]
+        return tuple(self.shape[j:k])
 
     @property
-    def right_eyebrow(self) -> list:
+    def right_eyebrow(self) -> tuple:
         (j, k) = self.FACIAL_LANDMARKS_INDEXES["Right_Eyebrow"]
-        return self.shape[j:k]
+        return tuple(self.shape[j:k])
 
     @property
-    def left_eyebrow(self) -> list:
+    def left_eyebrow(self) -> tuple:
         (j, k) = self.FACIAL_LANDMARKS_INDEXES["Left_Eyebrow"]
-        return self.shape[j:k]
+        return tuple(self.shape[j:k])
 
     @property
-    def right_eye(self) -> list:
+    def right_eye(self) -> tuple:
         (j, k) = self.FACIAL_LANDMARKS_INDEXES["Right_Eye"]
-        return self.shape[j:k]
+        return tuple(self.shape[j:k])
 
     @property
-    def left_eye(self) -> list:
+    def left_eye(self) -> tuple:
         (j, k) = self.FACIAL_LANDMARKS_INDEXES["Left_Eye"]
-        return self.shape[j:k]
+        return tuple(self.shape[j:k])
 
     @property
-    def nose(self) -> list:
+    def nose(self) -> tuple:
         (j, k) = self.FACIAL_LANDMARKS_INDEXES["Nose"]
-        return self.shape[j:k]
+        return tuple(self.shape[j:k])
 
     @property
-    def jaw(self) -> list:
+    def jaw(self) -> tuple:
         (j, k) = self.FACIAL_LANDMARKS_INDEXES["Jaw"]
-        return self.shape[j:k]
+        return tuple(self.shape[j:k])
 
 
 class FaceDetector:
