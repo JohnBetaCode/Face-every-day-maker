@@ -25,7 +25,6 @@ Tools like ttygif can help, but check out Asciinema for a more sophisticated met
 ![GitHub pull requests](https://img.shields.io/github/issues-pr-raw/JohnBetaCode/Face-every-day-maker?label=Open%20Pull%20Request)
 ![GitHub language count](https://img.shields.io/github/languages/count/JohnBetaCode/Face-every-day-maker?label=Languages)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/JohnBetaCode/Face-every-day-maker)
 ![GitHub contributors](https://img.shields.io/github/contributors/JohnBetaCode/Face-every-day-maker)
 ![GitHub last commit](https://img.shields.io/github/last-commit/JohnBetaCode/Face-every-day-maker)
 ![Made from](https://img.shields.io/badge/From-Colombia-Yellow)
@@ -38,11 +37,12 @@ add a link to any reference visitors might be unfamiliar with. A trrlist of Feat
 or a Background subsection can also be added here. If there are alternatives
 to your project, this is a good place to list differentiating factors.  -->
 ## **Description**
-This is a tool for making a every day video if you take a picture of you everyday (just to see how you get old)
+This project is a tool for making a everyday video, which is timelapse video or slides video, of images but for face of a person, this if you take a picture of yourself everyday and you want to appreciate how you are getting old. In this readme file there're the instructions for running the dev-working environment and the 
 
+<br />
 
 ## **Motivation**
-xxxxxxxxxx
+I made this repo to explain some of my students the basic concepts of git in practice, removing, and modifying some parts of the code, making issues, and PR (pull request), also to show them some practices of coding, documentation, virtual environments, container, and dependencies for developments.
 
 <br />
  
@@ -65,7 +65,7 @@ reasonably include in the README.
 A recommendation is to use [VS Code](https://code.visualstudio.com/) as the main IDE for development. Make sure you also have installed in your host:
  1. [docker-ce](https://docs.docker.com/install/)
  2. [docker-compose](https://docs.docker.com/compose/install/)
- 3. [Remote development](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack)[extensions]
+ 3. [Remote development](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack)[extension]
  4. [Ubuntu 20.04](https://releases.ubuntu.com/20.04/) 
 
 <br />
@@ -75,7 +75,22 @@ A recommendation is to use [VS Code](https://code.visualstudio.com/) as the main
  
 1. [Building and running the development-container](docs/dev_ws_seting_up.md) 
 2. [Running every day studio](docs/running_studio.md) 
+2. [Code structure and explanation](docs/code_explanation.md) 
 
+
+
+<br />
+
+ <!-- ---------------------------------------------------------------------- -->
+
+## **Drawbacks & Enhancements**
+
+* **[ENHACEMENT]**: Add support to operate/modify the image (rotate, move, scale), and save/load this settings for every file, although auto-fit face is working really well.
+* **[ENHACEMENT]**: the visuals and graphic user interface could be better.
+* **[FEATURE]**: Remove somehow the background of the image and take only the person shape, body or face only.
+* **[FEATURE]**: Add filters to the faces :)
+
+If you think in more incredible ideas, create a issue with the correct label: issue, enhancement, bug, etc ...
 
 <br />
 
@@ -94,7 +109,7 @@ inadvertently break something. Having instructions for running tests is
 especially helpful if it requires external setup, such as starting a Selenium
 server for testing in a browser.  -->
  
-## **Contributing**
+## **Contributing** 
  
 We welcome contributions from everyone, and to ensure our community stays open and healthy we adhere to the Contributor Covenant, a widely used [code of conduct](https://github.com/Autoware-AI/autoware.ai/wiki/Contributing-to-Autoware)(Same as Autoware) adopted by many other communities such as Linux, Ruby on Rails and GitHub. Everyone participating in the developments are expected to follow the code of conduct. If someone in the community happens to be violating these terms, please let the project leads know, and we will address it as soon as possible.
  
@@ -118,6 +133,8 @@ combination of an issue tracker, a chat room, an email address, etc.  -->
 Please feel free to contact any of our developers for any questions and help, we will be more than happy to help you:
  
 * [John Betancourt ](https://www.linkedin.com/in/johnbetacode/)
+
+<br />
 
 <!-- ---------------------------------------------------------------------- -->
 <!-- License: For open source projects, say how it is licensed.  -->
