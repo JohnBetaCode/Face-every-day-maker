@@ -69,23 +69,28 @@ def printlog(
     caller = inspect.stack()[1][3].upper() if caller is None else caller
     _str = "[{}][{}][{}]: {}".format(bcolors.LOG[msg_type][1], file, caller, msg)
 
-    if bcolors.DEBUG_LEVEL >= 4 and msg_type != "FATAL":
-        return
-    elif bcolors.DEBUG_LEVEL >= 3 and (msg_type != "FATAL" or msg_type != "ERROR"):
-        return
-    elif bcolors.DEBUG_LEVEL >= 2 and (
-        msg_type != "FATAL" or msg_type != "ERROR" or msg_type != "WARN"
-    ):
-        return
-    elif bcolors.DEBUG_LEVEL >= 1 and (
-        msg_type != "FATAL"
-        or msg_type != "ERROR"
-        or msg_type != "WARN"
-        or msg_type != "INFO"
-    ):
-        return
-    else:
+    if not msg_type in bcolors.LOG.keys():
+        print(_str, flush=True)
+    elif msg_type == "OKGREEN":
         print(bcolors.LOG[msg_type][0] + _str + bcolors.ENDC, flush=True)
+    else:
+        if bcolors.DEBUG_LEVEL >= 4 and msg_type != "FATAL":
+            return
+        elif bcolors.DEBUG_LEVEL >= 3 and (msg_type != "FATAL" or msg_type != "ERROR"):
+            return
+        elif bcolors.DEBUG_LEVEL >= 2 and (
+            msg_type != "FATAL" or msg_type != "ERROR" or msg_type != "WARN"
+        ):
+            return
+        elif bcolors.DEBUG_LEVEL >= 1 and (
+            msg_type != "FATAL"
+            or msg_type != "ERROR"
+            or msg_type != "WARN"
+            or msg_type != "INFO"
+        ):
+            return
+        else:
+            print(bcolors.LOG[msg_type][0] + _str + bcolors.ENDC, flush=True)
 
 
 def print_text_list(
