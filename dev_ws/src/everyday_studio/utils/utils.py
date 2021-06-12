@@ -12,7 +12,6 @@ import os
 
 import cv2
 
-# =============================================================================
 import numpy as np
 
 # =============================================================================
@@ -27,11 +26,10 @@ class bcolors:
     LOG = {
         "WARN": ["\033[93m", "WARN"],
         "ERROR": ["\033[91m", "ERROR"],
+        "FATAL": ["\033[91m", "ERROR"],
         "OKGREEN": ["\033[32m", "INFO"],
-        "OKPURPLE": ["\033[35m", "INFO"],
+        "DEBUG": ["\033[35m", "INFO"],
         "INFO": ["\033[0m", "INFO"],  # ['\033[94m', "INFO"],
-        "BOLD": ["\033[1m", "INFO"],
-        "GRAY": ["\033[90m", "INFO"],
     }
     BOLD = "\033[1m"
     ENDC = "\033[0m"
@@ -39,6 +37,8 @@ class bcolors:
     OKBLUE = "\033[94m"
     GRAY = "\033[90m"
     UNDERLINE = "\033[4m"
+
+    DEBUG_LEVEL = int(os.getenv("DEBUG_LEVEL", default=4))
 
 
 def printlog(
@@ -69,7 +69,23 @@ def printlog(
     caller = inspect.stack()[1][3].upper() if caller is None else caller
     _str = "[{}][{}][{}]: {}".format(bcolors.LOG[msg_type][1], file, caller, msg)
 
-    print(bcolors.LOG[msg_type][0] + _str + bcolors.ENDC, flush=True)
+    if bcolors.DEBUG_LEVEL >= 4 and msg_type != "FATAL":
+        return
+    elif bcolors.DEBUG_LEVEL >= 3 and (msg_type != "FATAL" or msg_type != "ERROR"):
+        return
+    elif bcolors.DEBUG_LEVEL >= 2 and (
+        msg_type != "FATAL" or msg_type != "ERROR" or msg_type != "WARN"
+    ):
+        return
+    elif bcolors.DEBUG_LEVEL >= 1 and (
+        msg_type != "FATAL"
+        or msg_type != "ERROR"
+        or msg_type != "WARN"
+        or msg_type != "INFO"
+    ):
+        return
+    else:
+        print(bcolors.LOG[msg_type][0] + _str + bcolors.ENDC, flush=True)
 
 
 def print_text_list(

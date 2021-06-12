@@ -177,7 +177,10 @@ class Studio:
         Constructor for every day studio instance
         """
 
-        # ---------------------------------------------------------------------``
+        # ---------------------------------------------------------------------
+        self._DEBUG_LEVEL = int(os.getenv("DEBUG_LEVEL", default=1))
+
+        # ---------------------------------------------------------------------
         # instancite face detector object
         self._PREVISUALIZE_FACE_CORRECTION = int(
             os.getenv("PREVISUALIZE_FACE_CORRECTION", default=1)
@@ -386,7 +389,12 @@ class Studio:
         printlog(msg="stating video recorder\n", msg_type="INFO")
 
         # rocord every frame or video
-        for idx_data in tqdm(range(len(self.dataset.data_values))):
+        iterator = (
+            tqdm(range(len(self.dataset.data_values)))
+            if self._DEBUG_LEVEL >= 3
+            else range(len(self.dataset.data_values))
+        )
+        for idx_data in iterator:
 
             try:
                 # go to index
@@ -394,6 +402,7 @@ class Studio:
 
                 # Check that the current sample has data
                 if self.dataset.idx_img is not None and self.dataset.idx_img.isfile:
+                    printlog(msg=self.dataset.idx_img.name, msg_type="DEBUG")
 
                     # get current idx dataset image
                     idx_img = self.dataset.idx_img.get_data(
@@ -432,7 +441,7 @@ class Studio:
             if self._VIDEO_EXPORT_DATE:
                 idx_img = print_text_list(
                     img=idx_img,
-                    tex_list=[str(self.dataset.idx_img.modified_date_stamp)],
+                    tex_list=[str(self.dataset.idx_img.modified_date)],
                     color=(255, 255, 255),
                     orig=(10, 25),
                     fontScale=0.5,
