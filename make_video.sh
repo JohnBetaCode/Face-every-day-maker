@@ -7,6 +7,22 @@ clear
 source "${PWD%}/dev_ws/configs/env_vars.sh"
 
 # -----------------------------------------------------------------------
+if [ "$DOWNLOAD_EXAMPLE_DATASET" == "1" ] || [ -z "$DOWNLOAD_EXAMPLE_ID"];
+    then
+        mkdir ${PWD%}/dev_ws/media/images
+        TEMP_FILE_NAME="everyday_studio_dataset_example.zip"
+        if [ -f "${PWD%}/dev_ws/media/images/${TEMP_FILE_NAME}" ];
+            then
+                echo "sample dataset ${TEMP_FILE_NAME} already exits"
+            else
+                echo "downloading dataset, please wait ..."
+                gdown https://drive.google.com/uc?id=${DOWNLOAD_EXAMPLE_ID} -O "${PWD%}/dev_ws/media/images/${TEMP_FILE_NAME}"
+                unzip "${PWD%}/dev_ws/media/images/${TEMP_FILE_NAME}" -d "${PWD%}/dev_ws/media/images/"
+                # rm -f "${PWD%}/dev_ws/media/images/${TEMP_FILE_NAME}"
+        fi
+fi
+
+# -----------------------------------------------------------------------
 # create local files
 FACE_PREDICTO_FILE_PATH=${PWD%}/dev_ws/configs/${PREDICTOR_NAME%}
 if test -f "$FACE_PREDICTO_FILE_PATH"; then

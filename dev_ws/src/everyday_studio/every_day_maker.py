@@ -218,6 +218,7 @@ class Studio:
         self._VIDEO_EXPORT_PREVISUALIZATION = int(
             os.getenv("VIDEO_EXPORT_PREVISUALIZATION", default=1)
         )
+        self._VIDEO_EXPORT_DATE = int(os.getenv("VIDEO_EXPORT_DATE", default=1))
 
         # Other constans and variables
         self._MEDIA_PATH = os.getenv("MEDIA_PATH")
@@ -433,7 +434,19 @@ class Studio:
                 )
                 continue
 
+            if self._VIDEO_EXPORT_DATE:
+                idx_img = print_text_list(
+                    img=idx_img,
+                    tex_list=[str(self.dataset.idx_img.modified_date_stamp)],
+                    color=(255, 255, 255),
+                    orig=(10, 25),
+                    fontScale=0.5,
+                    y_jump=23,
+                )
+
+            # Write image to video capture
             self._video_capture.write(img=idx_img)
+
             if self._VIDEO_EXPORT_PREVISUALIZATION:
                 cv2.imshow(
                     f"{self._WIN_NAME}_FACE_CORRECTION",
