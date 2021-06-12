@@ -310,7 +310,6 @@ class Studio:
 
         # Print help menu
         print(self.shortcuts)
-
         while True:
 
             try:
@@ -404,10 +403,6 @@ class Studio:
                     # Inference with face detector and check for face in image
                     self.face = self._face_detector.predict(img=idx_img)
                     if self.face is None:
-                        printlog(
-                            msg=f"skyping image {self.dataset.idx_img.name}, no face detected",
-                            msg_type="WARN",
-                        )
                         continue
                     else:
                         idx_img = self._face_detector.visualize_landmarks(

@@ -11,6 +11,7 @@ import cv2
 import dlib
 import numpy as np
 from collections import OrderedDict
+from utils import printlog
 
 # =============================================================================
 # CLASSES - CLASSES - CLASSES - CLASSES - CLASSES - CLASSES  - CLASSES - CLASSE
@@ -98,6 +99,8 @@ class FaceDetector:
             ]
         )
 
+        self._DEBUG_LEVEL = int(os.getenv("DEBUG_LEVEL", default=0))
+
     def predict(self, img: np.array) -> Face:
         """!
         Predicts faces in image, but only one is return
@@ -111,17 +114,39 @@ class FaceDetector:
         img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         rects = self._detector(img_gray, 1)
 
-        # loop over the face detections
-        for rect in rects:
-            # determine the facial landmarks for the face region, then
-            # convert the landmark (x, y)-coordinates to a NumPy array
-            shape = self._predictor(img_gray, rect)
-            shape = self.shape_to_numpy_array(shape=shape)
-
         if not len(rects):
+            if self._DEBUG_LEVEL:
+                printlog(
+                    msg=f"skyping image, no face detected",
+                    msg_type="WARN",
+                )
             return None
+        elif len(rects) == 1:
+            shape = self._predictor(img_gray, rects[0])
+            shape = self.shape_to_numpy_array(shape=shape)
+            return Face(shape=shape)
+        else:
+            if self._DEBUG_LEVEL:
+                printlog(
+                    msg="more than two faces detected, taken the bigger one by default",
+                    msg_type="WARN",
+                )
+            # loop over the face detections
+            max_arcLength = 0
+            idx_face = None
+            face = None
+            for rect in rects:
+                # determine the facial landmarks for the face region, then
+                # convert the landmark (x, y)-coordinates to a NumPy array
+                shape = self._predictor(img_gray, rect)
+                shape = self.shape_to_numpy_array(shape=shape)
+                idx_face = Face(shape=shape)
+                idx_arcLength = cv2.arcLength(np.float32([idx_face.jaw]), True)
+                if max_arcLength < idx_arcLength:
+                    face = idx_face
+                    max_arcLength = idx_arcLength
 
-        return Face(shape=shape)
+            return face
 
     def shape_to_numpy_array(self, shape) -> np.array:
         """!
