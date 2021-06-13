@@ -12,15 +12,12 @@ Tools like ttygif can help, but check out Asciinema for a more sophisticated met
 -->
 <!-- https://shields.io/ -->
 ![GitHub stars](https://img.shields.io/github/stars/JohnBetaCode/Face-every-day-maker?style=social)
-![GitHub followers](https://img.shields.io/github/followers/JohnBetaCode?style=social)
 ![GitHub forks](https://img.shields.io/github/forks/JohnBetaCode/Face-every-day-maker?label=Fork&style=social)
-![Twitter Follow](https://img.shields.io/twitter/follow/JohnBetaCode?style=social)
 
-<img src="xxxxx" alt="banner" width="1200">
 
-![GitHub labels](https://img.shields.io/github/labels/JohnBetaCode/Face-every-day-maker/Work%20in%20Progess)
+<img src="https://user-images.githubusercontent.com/43115782/121791980-28dca500-cbb5-11eb-99cf-2a2a2a63730f.jpg" alt="banner" width="1200">
+
 ![GitHub repo size](https://img.shields.io/github/repo-size/JohnBetaCode/Face-every-day-maker?label=Repo%20Size)
-![GitHub All Releases](https://img.shields.io/github/downloads/JohnBetaCode/Face-every-day-maker/total?label=Downloads)
 ![GitHub issues](https://img.shields.io/github/issues-raw/JohnBetaCode/Face-every-day-maker?label=Open%20Issues)
 ![GitHub pull requests](https://img.shields.io/github/issues-pr-raw/JohnBetaCode/Face-every-day-maker?label=Open%20Pull%20Request)
 ![GitHub language count](https://img.shields.io/github/languages/count/JohnBetaCode/Face-every-day-maker?label=Languages)
@@ -89,6 +86,7 @@ A recommendation is to use [VS Code](https://code.visualstudio.com/) as the main
 * **[ENHACEMENT]**: the visuals and graphic user interface could be better.
 * **[FEATURE]**: Remove somehow the background of the image and take only the person shape, body or face only.
 * **[FEATURE]**: Add filters to the faces :)
+* **[FEATURE]**: Key to remove/ignore file in the dataset
 
 If you think in more incredible ideas, create a issue with the correct label: issue, enhancement, bug, etc ...
 

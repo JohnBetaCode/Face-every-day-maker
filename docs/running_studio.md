@@ -60,10 +60,25 @@ keep in mind that the stack only will takes the images in format `png`, `jpg`. I
 
 You 
 
+<img src="https://user-images.githubusercontent.com/43115782/121791993-64776f00-cbb5-11eb-9607-91252523c5f5.png" alt="banner" width="1000">
+
+
+
+<img src="https://www.pyimagesearch.com/wp-content/uploads/2017/04/facial_landmarks_68markup.jpg" alt="banner" width="500">
 
 <br />
 
 ### **Exporting videos**
+
+
+<img src="https://user-images.githubusercontent.com/43115782/121792040-f7180e00-cbb5-11eb-9722-5200d20b8169.gif" alt="banner" width="200">
+
+<img src="https://user-images.githubusercontent.com/43115782/121792067-38a8b900-cbb6-11eb-882e-c2ae489e46af.gif" alt="banner" width="200">
+
+<img src="https://user-images.githubusercontent.com/43115782/121792038-f4b5b400-cbb5-11eb-8700-3cf72b7d07e5.gif" alt="banner" width="200">
+
+
+
 
 <br />
 <br />
