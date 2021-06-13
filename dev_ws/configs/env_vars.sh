@@ -7,7 +7,7 @@ export CONFIGS_PATH="/workspace/dev_ws/configs"                 # [string]: path
 export PREDICTOR_NAME="predictor_landmarks.dat"                 # [string]: file name of predictor for facial landmarks
 export MEDIA_PATH="/workspace/dev_ws/media"                     # [string]: path to media folder
 export DATASET_PATH="/workspace/dev_ws/media/images"            # [string]: path to media folder
-export DOWNLOAD_EXAMPLE_DATASET=1                               # [bool]: Enable/Disable example dataset downloading
+export DOWNLOAD_EXAMPLE_DATASET=0                               # [bool]: Enable/Disable example dataset downloading
 export DOWNLOAD_EXAMPLE_ID=1Oiq0NQUqQqk3kY8sOVHL1p0bMc1HQcSa    # [string]: sample dataset id 
 
 export PREVISUALIZE_FACE_CORRECTION=1 # [bool]: Enable/Disable face correction pre-visualization

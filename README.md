@@ -1,5 +1,5 @@
 <!-- https://www.makeareadme.com/ -->
-# Face-Every-Day-Maker-Studio
+# Face-Everyday-Maker-Studio
 
 <!--
 Badges: On some READMEs, you may see small images that convey metadata, such
@@ -87,6 +87,7 @@ A recommendation is to use [VS Code](https://code.visualstudio.com/) as the main
 * **[FEATURE]**: Remove somehow the background of the image and take only the person shape, body or face only.
 * **[FEATURE]**: Add filters to the faces :)
 * **[FEATURE]**: Key to remove/ignore file in the dataset
+* **[MUST-DO]**: Keep aspect ratio when re-scaling images
 
 If you think in more incredible ideas, create a issue with the correct label: issue, enhancement, bug, etc ...
 

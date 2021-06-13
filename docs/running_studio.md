@@ -27,7 +27,7 @@ Check and read the environment variables specified in `env_vars.sh` for more con
 
 <br />
 
-### **Possible error running the stack**
+### **Possible Error When Running the Stack**
 
 when running the stack is possible to get this error:
 
@@ -48,11 +48,24 @@ if you get it just run again until works, it's not usual to happen but this is a
 
 ### **Using Your Own Dataset**
 
-To use your dataset is so simply as coping your images of your ugly face in the subfolder images located in the `media` folder in the `dev_ws`(work space) path.
+To use your OWN dataset is so simply as coping your images of your ugly face in the subfolder images located in the `media` folder in the `dev_ws`(work space) path.
 
-The recommendation is using a folder for every year of your pictures as is shown below: 
+The recommendation is using a folder for every year as is shown below: 
+
+    📦images
+    ┣ 📂2014
+    ┣ 📂2015
+    ┣ 📂2016
+    ┣ 📂2017
+    ┣ 📂2018
+    ┣ 📂2019
+    ┣ 📂2020
+    ┣ 📂2021
+    ┗ 📂2022
 
 keep in mind that the stack only will takes the images in format `png`, `jpg`. If other formats are used go to the code and add the new one, and make a PR, but these are the most used formats by phones (never use raw, too heavy).
+
+iF YOU
 
 <br />
 
@@ -68,18 +81,12 @@ You
 
 <br />
 
-### **Exporting videos**
-
+### **Exporting Videos**
 
 <img src="https://user-images.githubusercontent.com/43115782/121792040-f7180e00-cbb5-11eb-9722-5200d20b8169.gif" alt="banner" width="200">
-
 <img src="https://user-images.githubusercontent.com/43115782/121792067-38a8b900-cbb6-11eb-882e-c2ae489e46af.gif" alt="banner" width="200">
-
 <img src="https://user-images.githubusercontent.com/43115782/121792038-f4b5b400-cbb5-11eb-8700-3cf72b7d07e5.gif" alt="banner" width="200">
 
 
-
-
 <br />
 <br />
-
