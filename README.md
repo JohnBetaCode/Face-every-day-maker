@@ -93,6 +93,7 @@ A recommendation is to use [VS Code](https://code.visualstudio.com/) as the main
 * **[FEATURE]**: Remove somehow the background of the image and take only the person shape, body or face only.
 * **[FEATURE]**: Add filters to the faces :)
 * **[FEATURE]**: Key to remove/ignore file in the dataset
+* **[FEATURE]**: Go directly to and file/image from GUI
 * **[MUST-DO]**: Keep aspect ratio when re-scaling images
 
 If you think in more incredible ideas, create a issue with the correct label: issue, enhancement, bug, etc ...
