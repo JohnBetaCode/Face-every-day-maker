@@ -75,7 +75,9 @@ If you load an dataset this is loaded and the last image (ordered by date) will 
   <img src="https://user-images.githubusercontent.com/43115782/121791993-64776f00-cbb5-11eb-9607-91252523c5f5.png" width="800"/>
 </p>
 
-Here, there's no code explanations, but if you'd like to do something like a original feature, or fork the repo for other proposes, next diagram shows how are the landmarks obtained by de `dlib` model, otherwise is recommended use the class `Face` in [face.py](https://github.com/JohnBetaCode/Face-every-day-maker/blob/main/dev_ws/src/everyday_studio/face.py), in this class you'll find properties to get immediately the coords or position in pixels of every aprt that compose the human face.
+Remember if you press the `H` key you can display some options available from the main window. Other key and shortcuts are for moving between the dataset and get a pre-visualization.
+
+Here, there's no code explanations, but if you'd like to do something like a original feature, or fork the repo for other proposes, next diagram shows how are the landmarks obtained by de `dlib` model, otherwise is recommended use the class `Face` in [face.py](https://github.com/JohnBetaCode/Face-every-day-maker/blob/main/dev_ws/src/everyday_studio/face.py), in this class you'll find properties to get immediately the coords or position in pixels of every part that compose the human face.
 
 <p align="center">
   <img src="https://www.pyimagesearch.com/wp-content/uploads/2017/04/facial_landmarks_68markup.jpg" width="400"/>
@@ -85,10 +87,21 @@ Here, there's no code explanations, but if you'd like to do something like a ori
 
 ### **Exporting Videos**
 
+If is not clear yet at all, what the everyday studio marker does is this kind of videos:
+
 | | | | 
 :-------------------------:|:-------------------------:|:-------------------------:|
 [<img src="https://user-images.githubusercontent.com/43115782/121792040-f7180e00-cbb5-11eb-9722-5200d20b8169.gif" width="300">]()| [<img src="https://user-images.githubusercontent.com/43115782/121792067-38a8b900-cbb6-11eb-882e-c2ae489e46af.gif" width="300">]()| [<img src="https://user-images.githubusercontent.com/43115782/121792038-f4b5b400-cbb5-11eb-8700-3cf72b7d07e5.gif" width="300">]()
 
- 
+For creating this amazing video of course the pictures should be about faces, and the face of just one person, but the studio can be used with faces of different people. 
+
+So, first make sure that you have a valid dataset located in the media folder, and after executing the studio press the key `C`, then depending on how the `DEBUG_LEVEL` variable is configured you'll see different kind of logs. If `DEBUG_LEVEL>=4` you'll only get a progress bar, warning, error, and fatal events, otherwise the logs will be verbose.
+
+While the process is completely some images can be discarded because a face was not detected by the model, if more than two faces are detected then the bigger one is used by the exportation process.
+
+When the process is done the video is saved in the export located in the develop workspace folder. If you run the script again the video will be over-written.
+
+Do not forget explore [env_vars.sh](https://github.com/JohnBetaCode/Face-every-day-maker/blob/main/dev_ws/configs/env_vars.sh)for more pre-visualization and export process options.
+
 <br />
 <br />
