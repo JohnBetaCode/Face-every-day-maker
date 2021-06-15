@@ -37,6 +37,11 @@ to your project, this is a good place to list differentiating factors.  -->
 ## **Description**
 This project is a tool for making a everyday video, which is timelapse video or slides video, of images but for face of a person, this if you take a picture of yourself everyday and you want to appreciate how you are getting old. In this readme file there're the instructions for running the dev-working environment and the 
 
+
+| | | | 
+:-------------------------:|:-------------------------:|:-------------------------:|
+[<img src="https://user-images.githubusercontent.com/43115782/121792040-f7180e00-cbb5-11eb-9722-5200d20b8169.gif" width="300">]()| [<img src="https://user-images.githubusercontent.com/43115782/121792067-38a8b900-cbb6-11eb-882e-c2ae489e46af.gif" width="300">]()| [<img src="https://user-images.githubusercontent.com/43115782/121792038-f4b5b400-cbb5-11eb-8700-3cf72b7d07e5.gif" width="300">]()
+
 <br />
 
 ## **Motivation**

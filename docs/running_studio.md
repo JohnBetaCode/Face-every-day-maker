@@ -78,7 +78,7 @@ If you load an dataset this is loaded and the last image (ordered by date) will 
 Here, there's no code explanations, but if you'd like to do something like a original feature, or fork the repo for other proposes, next diagram shows how are the landmarks obtained by de `dlib` model, otherwise is recommended use the class `Face` in [face.py](https://github.com/JohnBetaCode/Face-every-day-maker/blob/main/dev_ws/src/everyday_studio/face.py), in this class you'll find properties to get immediately the coords or position in pixels of every aprt that compose the human face.
 
 <p align="center">
-  <img src="https://www.pyimagesearch.com/wp-content/uploads/2017/04/facial_landmarks_68markup.jpg" width="300"/>
+  <img src="https://www.pyimagesearch.com/wp-content/uploads/2017/04/facial_landmarks_68markup.jpg" width="400"/>
 </p>
 
 
@@ -87,7 +87,8 @@ Here, there's no code explanations, but if you'd like to do something like a ori
 
 | | | | 
 :-------------------------:|:-------------------------:|:-------------------------:|
-[<img src="https://user-images.githubusercontent.com/43115782/121792040-f7180e00-cbb5-11eb-9722-5200d20b8169.gif" width="200">]()| [<img src="https://user-images.githubusercontent.com/43115782/121792067-38a8b900-cbb6-11eb-882e-c2ae489e46af.gif" width="200">]()| [<img src="https://user-images.githubusercontent.com/43115782/121792038-f4b5b400-cbb5-11eb-8700-3cf72b7d07e5.gif" width="200">]()
+[<img src="https://user-images.githubusercontent.com/43115782/121792040-f7180e00-cbb5-11eb-9722-5200d20b8169.gif" width="300">]()| [<img src="https://user-images.githubusercontent.com/43115782/121792067-38a8b900-cbb6-11eb-882e-c2ae489e46af.gif" width="300">]()| [<img src="https://user-images.githubusercontent.com/43115782/121792038-f4b5b400-cbb5-11eb-8700-3cf72b7d07e5.gif" width="300">]()
+
  
 <br />
 <br />
