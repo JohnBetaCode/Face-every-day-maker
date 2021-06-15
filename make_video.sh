@@ -7,8 +7,7 @@ clear
 source "${PWD%}/dev_ws/configs/env_vars.sh"
 
 # -----------------------------------------------------------------------
-if [ "$DOWNLOAD_EXAMPLE_DATASET" == "1" ] || [ -z "$DOWNLOAD_EXAMPLE_ID"];
-    then
+if [ "$DOWNLOAD_EXAMPLE_DATASET" == "1" ] || [ -z "$DOWNLOAD_EXAMPLE_ID" ]; then
         mkdir ${PWD%}/dev_ws/media/images
         TEMP_FILE_NAME="everyday_studio_dataset_example.zip"
         if [ -f "${PWD%}/dev_ws/media/images/${TEMP_FILE_NAME}" ];

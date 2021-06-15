@@ -14,8 +14,9 @@ Tools like ttygif can help, but check out Asciinema for a more sophisticated met
 ![GitHub stars](https://img.shields.io/github/stars/JohnBetaCode/Face-every-day-maker?style=social)
 ![GitHub forks](https://img.shields.io/github/forks/JohnBetaCode/Face-every-day-maker?label=Fork&style=social)
 
-
-<img src="https://user-images.githubusercontent.com/43115782/121791980-28dca500-cbb5-11eb-99cf-2a2a2a63730f.jpg" alt="banner" width="1200">
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/43115782/121791980-28dca500-cbb5-11eb-99cf-2a2a2a63730f.jpg" width="1200"/>
+</p>
 
 ![GitHub repo size](https://img.shields.io/github/repo-size/JohnBetaCode/Face-every-day-maker?label=Repo%20Size)
 ![GitHub issues](https://img.shields.io/github/issues-raw/JohnBetaCode/Face-every-day-maker?label=Open%20Issues)
