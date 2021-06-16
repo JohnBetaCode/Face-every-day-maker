@@ -168,7 +168,7 @@ class DataSet:
 
     @property
     def len(self) -> int:
-        return len(self.data_values)
+        return len(self.data_values) if self.data_values is not None else 0
 
 
 class Studio:
@@ -506,10 +506,18 @@ class Studio:
             img=img,
             tex_list=[
                 f"idx: {self.dataset.idx}/{self.dataset.len}",
-                f"file: {self.dataset.idx_img.name}.{self.dataset.idx_img.extension}",
-                f"date creation: {self.dataset.idx_img.created_date}",
-                f"date modified: {self.dataset.idx_img.modified_date}",
-                f"size: {self.dataset.idx_img.width}x{self.dataset.idx_img.height}x{self.dataset.idx_img.channels}",
+                f"file: {self.dataset.idx_img.name}.{self.dataset.idx_img.extension}"
+                if self.dataset.idx_img is not None
+                else "",
+                f"date creation: {self.dataset.idx_img.created_date}"
+                if self.dataset.idx_img is not None
+                else "",
+                f"date modified:q {self.dataset.idx_img.modified_date}"
+                if self.dataset.idx_img is not None
+                else "",
+                f"size: {self.dataset.idx_img.width}x{self.dataset.idx_img.height}x{self.dataset.idx_img.channels}"
+                if self.dataset.idx_img is not None
+                else "",
             ],
             color=(255, 255, 255),
             orig=(10, 25),
