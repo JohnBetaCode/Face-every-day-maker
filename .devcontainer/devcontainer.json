@@ -32,6 +32,7 @@
 		"tyriar.sort-lines",
 		"ms-python.vscode-pylance",
 		"shinotatwu-ds.file-tree-generator",
-		"janisdd.vscode-edit-csv"
+		"janisdd.vscode-edit-csv",
+		"helgardrichard.helium-icon-theme"
 	],
 }
