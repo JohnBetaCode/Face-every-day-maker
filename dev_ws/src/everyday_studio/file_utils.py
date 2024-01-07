@@ -188,7 +188,6 @@ def get_sub_folders(folder: str = "") -> list:
 # IMPLEMENTATION EXAMPLE - IMPLEMENTATION EXAMPLE - IMPLEMENTATION EXAMPLE - IM
 # =============================================================================
 if __name__ == "__main__":
-
     # Get files from absolute path and its subfolders contents
     files = {
         sub_folder: get_files_names(folder=sub_folder, extensions=(".jpg", ".png"))

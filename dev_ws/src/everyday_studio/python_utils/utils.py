@@ -98,7 +98,6 @@ def print_text_list(
     fontScale: float = 0.7,
     y_jump: int = 30,
 ):
-
     """!
     Print a text list on image in desending order
     @param img 'cv2.math' image to draw components
@@ -110,7 +109,6 @@ def print_text_list(
     """
 
     for idx, text in enumerate(tex_list):
-
         cv2.putText(
             img=img,
             text=text,
@@ -138,7 +136,6 @@ def print_text_list(
 def print_text_list2(
     img, data_list: list, orig=(10, 25), fontScale: float = 0.7, y_jump: int = 30
 ):
-
     """!
     Print a text list on image in desending order
     @param img 'cv2.math' image to draw components
@@ -149,7 +146,6 @@ def print_text_list2(
     """
 
     for idx, data in enumerate(reversed(data_list)):
-
         cv2.putText(
             img=img,
             text=data[0],
@@ -269,7 +265,6 @@ def insert_image(
     border_color: tuple = (255, 255, 255),
     interpolation=cv2.INTER_NEAREST,
 ):
-
     """!
     Inserts an image "inserted_image" over input image "original_image"
     @param original_image `cv2.math` background image
@@ -401,7 +396,6 @@ def insert_image(
 
 
 def flat_matrix_for_service(numpy_array):
-
     """!
     Flat numpy matrix in vector
     @param numpy_array: `np.array` matrix to flat
@@ -473,7 +467,6 @@ def discrete_contour(contour, Dl):
 
     # Iterate through all contour points
     for idx, cordinate in enumerate(contour):
-
         # Select next contour for operation
         if not idx == len(contour) - 1:
             next_cordinate = contour[idx + 1]

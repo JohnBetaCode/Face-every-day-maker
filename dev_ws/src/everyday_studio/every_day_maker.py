@@ -18,6 +18,7 @@ from python_utils import printlog, try_catch_log, print_text_list
 from face import FaceStudio
 from file_utils import Image, get_files_names, get_sub_folders
 
+
 # =============================================================================
 # CLASSES - CLASSES - CLASSES - CLASSES - CLASSES - CLASSES  - CLASSES - CLASSE
 # =============================================================================
@@ -41,7 +42,7 @@ class DataSet:
 
         if self.path != "":
             self.load(path=self.path)
-        
+
     def goto_next(self) -> None:
         """!
         go to next dataset index/sample if is valid do it
@@ -74,7 +75,9 @@ class DataSet:
         """!
         go to the last dataset index
         """
-        self.goto_idx(idx=int(len(self.data_values) - 1), print_info=self._PRINT_IMG_INFO)
+        self.goto_idx(
+            idx=int(len(self.data_values) - 1), print_info=self._PRINT_IMG_INFO
+        )
 
     def goto_idx(self, idx: int, print_info: bool = False) -> None:
         """!
@@ -85,7 +88,6 @@ class DataSet:
 
         if self.data_values is not None:
             if idx >= 0 or idx < len(self.data_values):
-
                 # Asssing new index
                 self.idx = idx
 
@@ -190,7 +192,7 @@ class Studio:
             os.getenv("VIDEO_EXPORT_PREVISUALIZATION", default=1)
         )
         self._VIDEO_EXPORT_DATE = int(os.getenv("VIDEO_EXPORT_DATE", default=1))
-        
+
         self._EXPORT_PATH = os.getenv("VIDEO_EXPORT_PATH")
         self._EXPORT_VIDEO_NAME = os.getenv("VIDEO_NAME")
 
@@ -205,7 +207,7 @@ class Studio:
         # instance dataset detector object
         self.dataset = DataSet(path=os.path.join(self._MEDIA_PATH, "images"))
 
-        # --------------------------------------------------------------------- 
+        # ---------------------------------------------------------------------
         # Video Writer Object
         self._video_capture = VideoWriter(
             file_path=self._EXPORT_PATH,
@@ -300,13 +302,11 @@ class Studio:
 
         # Print help menu
         print(self.shortcuts)
-        
-        while True:
 
+        while True:
             try:
                 # Check that the current sample has data
                 if self.dataset.idx_img is not None and self.dataset.idx_img.isfile:
-
                     # get current idx dataset image
                     idx_img = self.dataset.idx_img.get_data(
                         size=(self._VIDEO_WIDTH, self._VIDEO_HEIGHT)
@@ -323,11 +323,12 @@ class Studio:
                 idx_img = np.zeros((self._VIDEO_WIDTH, self._VIDEO_HEIGHT, 3), np.uint8)
 
             cv2.imshow(
-                self._WIN_NAME, cv2.resize(
-                        idx_img,
-                        (self._WIN_WIDTH, self._WIN_HEIGHT),
-                        int(cv2.INTER_NEAREST),
-                    )
+                self._WIN_NAME,
+                cv2.resize(
+                    idx_img,
+                    (self._WIN_WIDTH, self._WIN_HEIGHT),
+                    int(cv2.INTER_NEAREST),
+                ),
             )
             self.cb_key_event(key=cv2.waitKeyEx(self._WIN_TIME))
 
@@ -362,7 +363,6 @@ class Studio:
             else range(len(self.dataset.data_values))
         )
         for idx_data in iterator:
-
             try:
                 # go to index
                 self.dataset.goto_idx(idx=idx_data)
@@ -422,7 +422,9 @@ class Studio:
                     ),
                 )
                 if cv2.waitKey(10) in [69, 99]:
-                    printlog(msg="The video creation process was canceled", msg_type="WARN")
+                    printlog(
+                        msg="The video creation process was canceled", msg_type="WARN"
+                    )
                     self.dataset.goto_idx(idx=current_idx)
                     return
 
@@ -476,7 +478,6 @@ class Studio:
 # IMPLEMENTATION EXAMPLE - IMPLEMENTATION EXAMPLE - IMPLEMENTATION EXAMPLE - IM
 # =============================================================================
 if __name__ == "__main__":
-
     # Create instance of everyday studio
     day_studio = Studio()
     day_studio.run()
