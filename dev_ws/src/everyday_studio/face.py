@@ -12,8 +12,8 @@ import sys
 sys.path.append("/workspace/dev_ws/src/background_removal")
 
 import os
-from utils import FPSmetric
 from selfieSegmentation import MPSegmentation
+from faceDetection import MPFaceDetection
 from engine import Engine
 import cv2
 
@@ -32,7 +32,6 @@ class FaceStudio:
         self._FACE_STUDIO_BLURRING = int(os.getenv("FACE_STUDIO_BLURRING", default=1))
         self._FACE_STUDIO_GRAY = int(os.getenv("FACE_STUDIO_GRAY", default=1))
 
-        self.fpsMetric = FPSmetric()
         self.segmentationModule = MPSegmentation(
             threshold=self._FACE_STUDIO_BLURRING_THRESH,
             bg_images_path="",
@@ -41,11 +40,28 @@ class FaceStudio:
                 self._FACE_STUDIO_BLURRING_RATIO,
             ),
         )
+
+        self.mpFaceDetector = MPFaceDetection() 
+
         self.selfieSegmentation = Engine(
-            show=False, custom_objects=[self.segmentationModule, self.fpsMetric]
+            show=False, 
+            custom_objects=[
+                self.segmentationModule, 
+            ]
+        )
+
+        self.faceDetection = Engine(
+            show=True, 
+            custom_objects=[
+                self.mpFaceDetector, 
+            ]
         )
 
     def process(self, frame):
+
+        frame = self.faceDetection.custom_processing(frame=frame)
+        return frame
+
         if self._FACE_STUDIO_BLURRING:
             frame = self.selfieSegmentation.custom_processing(frame=frame)
         if self._FACE_STUDIO_GRAY:
