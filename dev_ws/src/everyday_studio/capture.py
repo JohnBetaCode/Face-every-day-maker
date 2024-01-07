@@ -6,7 +6,7 @@ Aka: @JohnBetaCode
 # =============================================================================
 # LIBRARIES AND DEPENDENCIES - LIBRARIES AND DEPENDENCIES - LIBRARIES AND DEPEN
 # =============================================================================
-from utils import printlog, try_catch_log
+from python_utils import printlog, try_catch_log
 import cv2
 import numpy as np
 import os

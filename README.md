@@ -28,7 +28,6 @@ Tools like ttygif can help, but check out Asciinema for a more sophisticated met
 ![Made from](https://img.shields.io/badge/From-Colombia-Yellow)
  
 
-
 <!-- ---------------------------------------------------------------------- -->
 <!-- Let people know what your project can do specifically. Provide context and
 add a link to any reference visitors might be unfamiliar with. A trrlist of Features
@@ -69,7 +68,7 @@ A recommendation is to use [VS Code](https://code.visualstudio.com/) as the main
  1. [docker-ce](https://docs.docker.com/install/)
  2. [docker-compose](https://docs.docker.com/compose/install/)
  3. [Remote development](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack)[extension]
- 4. [Ubuntu 20.04](https://releases.ubuntu.com/20.04/) 
+ 4. [Ubuntu 22.04](https://releases.ubuntu.com/20.04/) 
 
 <br />
 
@@ -77,8 +76,8 @@ A recommendation is to use [VS Code](https://code.visualstudio.com/) as the main
 ## **Tutorials**
  
 1. [Building and running the development-container](docs/dev_ws_seting_up.md) 
-2. [Running every day studio](docs/running_studio.md) 
-2. [Code structure and explanation](docs/code_explanation.md) 
+2. DEPRECATED [Running every day studio](docs/running_studio.md) 
+2. DEPRECATED [Code structure and explanation](docs/code_explanation.md) 
 
 
 
@@ -90,7 +89,6 @@ A recommendation is to use [VS Code](https://code.visualstudio.com/) as the main
 
 * **[ENHACEMENT]**: Add support to operate/modify the image (rotate, move, scale), and save/load this settings for every file, although auto-fit face is working really well.
 * **[ENHACEMENT]**: the visuals and graphic user interface could be better.
-* **[FEATURE]**: Remove somehow the background of the image and take only the person shape, body or face only.
 * **[FEATURE]**: Add filters to the faces :)
 * **[FEATURE]**: Key to remove/ignore file in the dataset
 * **[FEATURE]**: Go directly to and file/image from GUI
@@ -160,30 +158,5 @@ with Licensor regarding such Contributions.
 
 <br />
 
-
-<!-- ---------------------------------------------------------------------- -->
-## **Other Projects Media**
- 
-[<img src="https://img.youtube.com/vi/m7jZsa-QVMQ/0.jpg" width="200">](https://www.youtube.com/watch?v=m7jZsa-QVMQ)
-[<img src="https://img.youtube.com/vi/c6agroNH1t0/0.jpg" width="200">](https://www.youtube.com/watch?v=c6agroNH1t0)
-[<img src="https://img.youtube.com/vi/s5YpJLkszts/0.jpg" width="200">](https://www.youtube.com/watch?v=s5YpJLkszts)
-[<img src="https://img.youtube.com/vi/szuZsLWioAQ/0.jpg" width="200">](https://www.youtube.com/watch?v=szuZsLWioAQ)
-[<img src="https://img.youtube.com/vi/yGe7s1Azp9w/0.jpg" width="200">](https://www.youtube.com/watch?v=yGe7s1Azp9w)
-[<img src="https://img.youtube.com/vi/zORfZK8v2TY/0.jpg" width="200">](https://www.youtube.com/watch?v=zORfZK8v2TY)
-[<img src="https://img.youtube.com/vi/V9ZiZSh1MZM/0.jpg" width="200">](https://www.youtube.com/watch?v=V9ZiZSh1MZM)
-[<img src="https://img.youtube.com/vi/acMQxwVPed8/0.jpg" width="200">](https://www.youtube.com/watch?v=acMQxwVPed8)
-[<img src="https://img.youtube.com/vi/Z4jQc3-psy8/0.jpg" width="200">](https://www.youtube.com/watch?v=0U3lQ1u-Hd4)
-[<img src="https://img.youtube.com/vi/VX4ywdUtaI4/0.jpg" width="200">](https://www.youtube.com/watch?v=VX4ywdUtaI4)
-[<img src="https://img.youtube.com/vi/0BHpz8lCFfc/0.jpg" width="200">](https://www.youtube.com/watch?v=0BHpz8lCFfc)
-[<img src="https://img.youtube.com/vi/0U3lQ1u-Hd4/0.jpg" width="200">](https://www.youtube.com/watch?v=0U3lQ1u-Hd4)
-[<img src="https://img.youtube.com/vi/QnXjbAGmS0U/0.jpg" width="200">](https://www.youtube.com/watch?v=QnXjbAGmS0U)
-[<img src="https://img.youtube.com/vi/TfKW2aXsCQQ/0.jpg" width="200">](https://www.youtube.com/watch?v=TfKW2aXsCQQ)
-[<img src="https://img.youtube.com/vi/9NKpoVVK-ko/0.jpg" width="200">](https://www.youtube.com/watch?v=9NKpoVVK-ko)
-[<img src="https://img.youtube.com/vi/4vM0W3lUiuM/0.jpg" width="200">](https://www.youtube.com/watch?v=4vM0W3lUiuM)
-[<img src="https://img.youtube.com/vi/hUH-o4Q304I/0.jpg" width="200">](https://www.youtube.com/watch?v=hUH-o4Q304I)
-[<img src="https://img.youtube.com/vi/o3hAfaeo0XE/0.jpg" width="200">](https://www.youtube.com/watch?v=o3hAfaeo0XE)
-[<img src="https://img.youtube.com/vi/muHPgD69cwE/0.jpg" width="200">](https://www.youtube.com/watch?v=muHPgD69cwE)
-[<img src="https://img.youtube.com/vi/JfgL1S9aE7o/0.jpg" width="200">](https://www.youtube.com/watch?v=JfgL1S9aE7o)
-[<img src="https://img.youtube.com/vi/UIxAvWMknCE/0.jpg" width="200">](https://www.youtube.com/watch?v=UIxAvWMknCE)
 
 <!-- ---------------------------------------------------------------------- -->

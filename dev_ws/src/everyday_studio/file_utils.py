@@ -6,13 +6,12 @@ Aka: @JohnBetaCode
 # =============================================================================
 # LIBRARIES AND DEPENDENCIES - LIBRARIES AND DEPENDENCIES - LIBRARIES AND DEPEN
 # =============================================================================
-from utils import printlog
+from python_utils import printlog, try_catch_log
 import os
 from datetime import datetime
 
 import cv2
 
-from utils import try_catch_log
 
 # =============================================================================
 # CLASSES - CLASSES - CLASSES - CLASSES - CLASSES - CLASSES  - CLASSES - CLASSE
@@ -133,10 +132,10 @@ class Image(File):
         """
 
         if not self.isfile:
-            printlog(msg=f"no file {self.name} to get data", msg_type="ERROR")
+            printlog(msg=f"not file {self.name} to get data", msg_type="ERROR")
             return None
         elif self.image is None:
-            printlog(msg=f"no data loaded yet from {self.name}", msg_type="ERROR")
+            printlog(msg=f"not data loaded yet from {self.name}", msg_type="ERROR")
             return None
         elif not len(size):
             return self.image

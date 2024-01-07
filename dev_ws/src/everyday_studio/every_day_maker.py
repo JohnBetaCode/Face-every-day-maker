@@ -1,6 +1,6 @@
 # =============================================================================
 """
-Author: John Betacourt Gonzalez
+Author: John Betancourt Gonzalez
 Aka: @JohnBetaCode
 """
 
@@ -9,17 +9,14 @@ Aka: @JohnBetaCode
 # =============================================================================
 import operator
 import os
-
 import cv2
 import numpy as np
-import math
 
 from tqdm import tqdm
-from face import Face, FaceDetector
 from capture import VideoWriter
+from python_utils import printlog, try_catch_log, print_text_list
+from face import FaceStudio
 from file_utils import Image, get_files_names, get_sub_folders
-from utils import printlog, try_catch_log, print_text_list
-
 
 # =============================================================================
 # CLASSES - CLASSES - CLASSES - CLASSES - CLASSES - CLASSES  - CLASSES - CLASSE
@@ -31,20 +28,20 @@ class DataSet:
         @param path 'string' absolute path to the dataset
         """
 
+        self._PRINT_IMG_INFO = int(os.getenv("PRINT_IMG_INFO", default=1))
+
         self.path = path
 
         self.idx = 0
+        self.idx_img = None
 
         self.data_files = None
         self.data_values = None
+        self.data_extensions = (".jpg", ".JPG", ".png", ".PNG")
 
-        self.data_extensions = (".jpg", ".png")
-
-        self.idx_img = None
-
-        if path != "":
+        if self.path != "":
             self.load(path=self.path)
-
+        
     def goto_next(self) -> None:
         """!
         go to next dataset index/sample if is valid do it
@@ -53,7 +50,7 @@ class DataSet:
         if self.data_values is not None:
             if self.idx < len(self.data_values) - 1:
                 self.idx += 1
-                self.goto_idx(idx=self.idx, print_info=True)
+                self.goto_idx(idx=self.idx, print_info=self._PRINT_IMG_INFO)
             else:
                 printlog(msg="idx exceed limit", msg_type="WARN")
         else:
@@ -67,7 +64,7 @@ class DataSet:
         if self.data_values is not None:
             if self.idx > 0:
                 self.idx -= 1
-                self.goto_idx(idx=self.idx, print_info=True)
+                self.goto_idx(idx=self.idx, print_info=self._PRINT_IMG_INFO)
             else:
                 printlog(msg="minimum idx limit", msg_type="WARN")
         else:
@@ -77,11 +74,11 @@ class DataSet:
         """!
         go to the last dataset index
         """
-        self.goto_idx(idx=int(len(self.data_values) - 1), print_info=True)
+        self.goto_idx(idx=int(len(self.data_values) - 1), print_info=self._PRINT_IMG_INFO)
 
     def goto_idx(self, idx: int, print_info: bool = False) -> None:
         """!
-        from specified idx moves assing a new one and load new file sample
+        from specified idx moves assign a new one and load new file sample
         @param idx 'int' index to go to sample
         @param print_info 'bool' show data info
         """
@@ -100,7 +97,6 @@ class DataSet:
             self.idx_img = None
             printlog(msg="No dataset loaded", msg_type="WARN")
 
-    @try_catch_log
     def load(self, path: str) -> None:
         """!
         loads the dataset from a specified path
@@ -112,7 +108,7 @@ class DataSet:
             printlog(msg=f"invalid path {path}", msg_type="WARN")
             return
 
-        # load dataset as subfolders and files
+        # load dataset as subfolder and files
         self.data_files = {
             sub_folder: get_files_names(
                 folder=sub_folder, extensions=self.data_extensions
@@ -138,18 +134,18 @@ class DataSet:
         # go to the first index of the dataset
         if len(self.data_values):
             self.idx = len(self.data_values) - 1
-            self.goto_idx(idx=self.idx)
+            self.goto_idx(idx=self.idx, print_info=self._PRINT_IMG_INFO)
 
     def __str__(self):
         """!
-        Get object instace string for printings
+        Get object instantiate string for printings
         @return str_ 'string' string with object instance info
         """
 
         if self.data_files is None and self.path == "":
-            return "no data loaded"
+            return "not data loaded"
         elif self.data_files is None:
-            return f"no dataset found in {self.path}"
+            return f"not dataset found in {self.path}"
 
         str_ = f"\nData set loaded from {self.path} \n\n"
         files_cnt = 0
@@ -180,33 +176,6 @@ class Studio:
         # ---------------------------------------------------------------------
         self._DEBUG_LEVEL = int(os.getenv("DEBUG_LEVEL", default=1))
 
-        # ---------------------------------------------------------------------
-        # instancite face detector object
-        self._PREVISUALIZE_FACE_CORRECTION = int(
-            os.getenv("PREVISUALIZE_FACE_CORRECTION", default=1)
-        )
-        self._face_detector = FaceDetector(
-            predictor_path=os.path.join(
-                os.getenv("CONFIGS_PATH"), os.getenv("PREDICTOR_NAME")
-            )
-        )
-        self.face = None
-
-        # ---------------------------------------------------------------------
-        # instancite of video capture/recorder
-        self._EXPORT_PATH = os.getenv("VIDEO_PATH", default="/workspace/dev_ws/export")
-        self._EXPORT_VIDEO_NAME = os.getenv("VIDEO_NAME", default="every_day")
-        self._video_capture = VideoWriter(
-            file_path=self._EXPORT_PATH,
-            file_name=self._EXPORT_VIDEO_NAME,
-            rate=int(os.getenv("VIDEO_RATE", default=30)),
-        )
-
-        # ---------------------------------------------------------------------
-        # instancite dataset detector object
-        self.dataset = DataSet(path=os.getenv("DATASET_PATH"))
-
-        # ---------------------------------------------------------------------
         # window properties
         self._WIN_NAME = os.getenv("WIN_NAME", default="every_day_studio")
         self._WIN_WIDTH = int(os.getenv("WIN_WIDTH", default=640))
@@ -216,15 +185,33 @@ class Studio:
         # video properties
         self._VIDEO_WIDTH = int(os.getenv("VIDEO_WIDTH", default=640))
         self._VIDEO_HEIGHT = int(os.getenv("VIDEO_HEIGHT", default=360))
-        self._VIDEO_EXPORT_GRAY = int(os.getenv("VIDEO_EXPORT_GRAY", default=1))
         self._VIDEO_EXPORT_VISUALS = int(os.getenv("VIDEO_EXPORT_VISUALS", default=1))
         self._VIDEO_EXPORT_PREVISUALIZATION = int(
             os.getenv("VIDEO_EXPORT_PREVISUALIZATION", default=1)
         )
         self._VIDEO_EXPORT_DATE = int(os.getenv("VIDEO_EXPORT_DATE", default=1))
+        
+        self._EXPORT_PATH = os.getenv("VIDEO_EXPORT_PATH")
+        self._EXPORT_VIDEO_NAME = os.getenv("VIDEO_NAME")
 
-        # Other constans and variables
+        # Other constant and variables
         self._MEDIA_PATH = os.getenv("MEDIA_PATH")
+
+        # ---------------------------------------------------------------------s
+        # Face studio for operations
+        self.face_studio = FaceStudio()
+
+        # ---------------------------------------------------------------------
+        # instance dataset detector object
+        self.dataset = DataSet(path=os.path.join(self._MEDIA_PATH, "images"))
+
+        # --------------------------------------------------------------------- 
+        # Video Writer Object
+        self._video_capture = VideoWriter(
+            file_path=self._EXPORT_PATH,
+            file_name=self._EXPORT_VIDEO_NAME,
+            rate=int(os.getenv("VIDEO_RATE", default=30)),
+        )
 
     @try_catch_log
     def cb_key_event(self, key) -> None:
@@ -266,11 +253,11 @@ class Studio:
             "ñ": {1048817, 1179857},
             "z": {1048698, 1179708, 122},
             "x": {1048696, 1179736},
-            "c": {1048675, 1179715},
+            "c": {1048675, 1179715, 99},
             "v": {1048694, 1179734},
-            "b": {1048674, 1179714},
-            "n": {1048686, 1114085},
-            "m": {1048685, 1179725},
+            "b": {1048674, 1179714, 98},
+            "n": {1048686, 1114085, 110},
+            "m": {1048685, 1179725, 109},
             "up arrow": {1245010, 1113938},
             "right arrow": {1245011, 1113939, 65361},
             "left arrow": {1245009, 1113937, 65363},
@@ -313,6 +300,7 @@ class Studio:
 
         # Print help menu
         print(self.shortcuts)
+        
         while True:
 
             try:
@@ -323,45 +311,23 @@ class Studio:
                     idx_img = self.dataset.idx_img.get_data(
                         size=(self._VIDEO_WIDTH, self._VIDEO_HEIGHT)
                     )
+                    idx_img = self.face_studio.process(frame=idx_img)
 
-                    # Inference with face detector and check for face in image
-                    self.face = self._face_detector.predict(img=idx_img)
-                    if self.face is None:
-                        printlog(
-                            msg="No face detected in image sample", msg_type="WARN"
-                        )
-                    else:
-                        idx_img = self._face_detector.visualize_landmarks(
-                            img=idx_img, face=self.face
-                        )
-                        if self._PREVISUALIZE_FACE_CORRECTION:
-                            cv2.imshow(
-                                f"{self._WIN_NAME}_FACE_CORRECTION",
-                                self.get_face_img_corrected(
-                                    img=self.dataset.idx_img.get_data(
-                                        size=(self._VIDEO_WIDTH, self._VIDEO_HEIGHT)
-                                    ),
-                                    face=self.face,
-                                    visuals=True,
-                                ),
-                            )
                 else:
                     idx_img = np.zeros(
                         (self._VIDEO_WIDTH, self._VIDEO_HEIGHT, 3), np.uint8
                     )
+
             except Exception as e:
                 printlog(msg=e, msg_type="ERROR")
                 idx_img = np.zeros((self._VIDEO_WIDTH, self._VIDEO_HEIGHT, 3), np.uint8)
 
             cv2.imshow(
-                self._WIN_NAME,
-                self.draw_visuals(
-                    img=cv2.resize(
+                self._WIN_NAME, cv2.resize(
                         idx_img,
                         (self._WIN_WIDTH, self._WIN_HEIGHT),
                         int(cv2.INTER_NEAREST),
                     )
-                ),
             )
             self.cb_key_event(key=cv2.waitKeyEx(self._WIN_TIME))
 
@@ -384,11 +350,12 @@ class Studio:
 
         # If there's no dataset
         if self.dataset.data_values is None:
+            printlog(msg="No data to export video", msg_type="ERROR")
             return
 
-        printlog(msg="stating video recorder\n", msg_type="INFO")
+        printlog(msg="starting video recorder ...", msg_type="WARN")
 
-        # rocord every frame or video
+        # record every frame or video
         iterator = (
             tqdm(range(len(self.dataset.data_values)))
             if self._DEBUG_LEVEL >= 3
@@ -410,30 +377,17 @@ class Studio:
                     )
 
                     # Inference with face detector and check for face in image
-                    self.face = self._face_detector.predict(img=idx_img)
-                    if self.face is None:
-                        continue
-                    else:
-                        idx_img = self._face_detector.visualize_landmarks(
-                            img=idx_img, face=self.face
-                        )
-                        idx_img = self.get_face_img_corrected(
-                            img=self.dataset.idx_img.get_data(
-                                size=(self._VIDEO_WIDTH, self._VIDEO_HEIGHT)
-                            ),
-                            face=self.face,
-                            visuals=self._VIDEO_EXPORT_VISUALS,
-                            exp_gray=self._VIDEO_EXPORT_GRAY,
-                        )
+                    idx_img = self.face_studio.process(frame=idx_img)
+
                 else:
                     printlog(
-                        msg=f"skyping image {self.dataset.idx_img.name}, file no found",
-                        msg_type="WARN",
+                        msg=f"skipping image {self.dataset.idx_img.name}, file no found",
+                        msg_type="ERROR",
                     )
                     continue
             except Exception as e:
                 printlog(
-                    msg=f"skyping image {self.dataset.idx_img.name}, error:{e}",
+                    msg=f"skipping image {self.dataset.idx_img.name}, error:{e}",
                     msg_type="ERROR",
                 )
                 continue
@@ -468,7 +422,7 @@ class Studio:
                     ),
                 )
                 if cv2.waitKey(10) in [69, 99]:
-                    printlog(msg="video creation process canceled", msg_type="WARN")
+                    printlog(msg="The video creation process was canceled", msg_type="WARN")
                     self.dataset.goto_idx(idx=current_idx)
                     return
 
@@ -477,7 +431,7 @@ class Studio:
         if record_audio and audio_src is not None:
             audio_src_path = os.path.join(self._MEDIA_PATH, "sound", audio_src)
             if os.path.isfile(audio_src_path):
-                printlog(msg="\nadding audio to video", msg_type="INFO")
+                printlog(msg="Adding audio to video ...", msg_type="INFO")
                 merge_audio_command = "ffmpeg -hide_banner -loglevel panic -y -i {src_path} -i {audio_src} -af apad -map 0:v -map 1:a -c:v copy -shortest {dst_path}".format(
                     src_path=self._video_capture.file_dir,
                     audio_src=audio_src_path,
@@ -496,108 +450,6 @@ class Studio:
         # return to the previous index
         self.dataset.goto_idx(idx=current_idx)
 
-    def draw_visuals(self, img: np.array) -> np.array:
-        """! draw studio visuals and data info in image
-        @param img 'np.array' image to draw visuals
-        @return img 'np.array' image with visuals drawn
-        """
-
-        img = print_text_list(
-            img=img,
-            tex_list=[
-                f"idx: {self.dataset.idx}/{self.dataset.len}",
-                f"file: {self.dataset.idx_img.name}.{self.dataset.idx_img.extension}"
-                if self.dataset.idx_img is not None
-                else "",
-                f"date creation: {self.dataset.idx_img.created_date}"
-                if self.dataset.idx_img is not None
-                else "",
-                f"date modified:q {self.dataset.idx_img.modified_date}"
-                if self.dataset.idx_img is not None
-                else "",
-                f"size: {self.dataset.idx_img.width}x{self.dataset.idx_img.height}x{self.dataset.idx_img.channels}"
-                if self.dataset.idx_img is not None
-                else "",
-            ],
-            color=(255, 255, 255),
-            orig=(10, 25),
-            fontScale=0.5,
-            y_jump=23,
-        )
-
-        return img
-
-    def get_face_img_corrected(
-        self, img: np.array, face: Face, exp_gray: bool = False, visuals: bool = False
-    ) -> np.array:
-        """!
-        Center and align a image respect to a face components
-        @param img 'np.array' image to center and align
-        @param face 'Face' face components to align image
-        @param exp_gray 'bool' export result in gray scale
-        @param visuals 'bool' print visuals in image result
-        @return img 'np.array' image centered and aligned respect with face
-        """
-
-        # ------------------------------------------------------------------
-        img = (
-            img
-            if not exp_gray
-            else cv2.cvtColor(cv2.cvtColor(img, cv2.COLOR_BGR2GRAY), cv2.COLOR_GRAY2BGR)
-        )
-
-        if visuals:
-            img = self._face_detector.visualize_landmarks(img=img, face=face)
-            cv2.line(
-                img,
-                tuple(face.left_eye[3]),
-                tuple(face.right_eye[0]),
-                (255, 255, 255),
-                1,
-            )
-
-        # ------------------------------------------------------------------
-        # Center and align image
-
-        dx = img.shape[1] // 2 - face.nose[2][0]
-        dy = img.shape[0] // 2 - face.nose[2][1]
-        cnt_pt = (img.shape[1] // 2, img.shape[0] // 2)
-        M = np.float32(
-            [
-                [1, 0, dx],
-                [0, 1, dy],
-            ]
-        )
-        img = cv2.warpAffine(img, M, (img.shape[1], img.shape[0]))
-
-        # ------------------------------------------------------------------
-        # Calculate angle to rate
-        angle = math.degrees(
-            math.atan2(
-                face.left_eye[3][1] - face.right_eye[0][1],
-                face.left_eye[3][0] - face.right_eye[0][0],
-            )
-        )
-
-        # Calculate resizing factor
-        len_scale = np.sqrt(
-            (face.left_eye[3][1] - face.right_eye[0][1]) ** 2
-            + (face.left_eye[3][0] - face.right_eye[0][0]) ** 2
-        )
-        scale = 1.0 + (1.0 - len_scale / 150.0)
-
-        # Find trans formation matrix
-        M = cv2.getRotationMatrix2D(center=cnt_pt, angle=angle, scale=scale)
-        img = cv2.warpAffine(img, M, (img.shape[1], img.shape[0]))
-
-        if visuals:
-            cv2.circle(img, (img.shape[1] // 2, img.shape[0] // 2), 1, (0, 0, 255), -1)
-
-        return img
-
-    def get_report(self) -> str:
-        return ""
-
     @property
     def shortcuts(self) -> str:
         """! Returns all options aviable from the studio window
@@ -608,7 +460,7 @@ class Studio:
             + f"\tH: show help menu\n"
             + f"\tN: go to next sample\n"
             + f"\tB: go to previous sample\n"
-            + f"\tM: go to previous sample\n"
+            + f"\tM: go to last sample\n"
             + f"\tC: create/export video\n"
             + f"\tQ: quit\n"
         )

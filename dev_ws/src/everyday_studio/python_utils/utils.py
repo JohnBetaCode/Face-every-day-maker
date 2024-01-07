@@ -44,7 +44,6 @@ class bcolors:
 def printlog(
     msg: str,
     msg_type: str = "INFO",
-    flush: bool = True,
     file: str = None,
     caller: str = None,
 ):
@@ -58,8 +57,6 @@ def printlog(
     @param caller (str, optional) Caller of the function. Defaults to None.
         If none it inspects the stack trace to get the name.
     """
-    if not flush:
-        return
 
     file = (
         os.path.splitext(os.path.basename(inspect.stack()[1][1]))[0].upper()
