@@ -2,6 +2,8 @@
 # ------------------------------------------
 # Ignore images
 *.jpg
+*.JPG
+*.HEIC
 *.png
 
 # Ignore videos
@@ -14,6 +16,7 @@ dev_ws/configs/shape_predictor_68_face_landmarks.dat
 
 # Ignore images in media folder
 dev_ws/media/images/*
+dev_ws/media/export/*
 dev_ws/export/*
 
 core

@@ -3,7 +3,7 @@
 # ----------------------------------------------------------------------------------------------------------------------
 export DEBUG_LEVEL=1                        # [int]: 0 - debug, 1 - info, 2 - warning, 3 - error, 4 - faltal
 export PRINT_IMG_INFO=0                     # [bool]: Enable/Disable image information printing in the prompt
-export MEDIA_PATH="/workspace/dev_ws/media" # [string]: path to media folder
+export MEDIA_PATH="/workspace/dev_ws/media/export" # [string]: path to media folder
 
 # ----------------------------------------------------------------------------------------------------------------------
 # FaceStudio configs
