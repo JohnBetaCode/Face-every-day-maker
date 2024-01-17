@@ -43,33 +43,27 @@ class FaceStudio:
 
         self.mpFaceDetector = MPFaceDetection() 
 
-        self.selfieSegmentation = Engine(
+        self.FaceSegmentation = Engine(
             show=False, 
             custom_objects=[
                 self.segmentationModule, 
-            ]
-        )
-
-        self.faceDetection = Engine(
-            show=True, 
-            custom_objects=[
                 self.mpFaceDetector, 
             ]
         )
 
     def process(self, frame):
 
-        frame = self.faceDetection.custom_processing(frame=frame)
-        return frame
+        frame_results = self.FaceSegmentation.custom_processing(frame=frame)
+        print(frame_results[1])
 
         if self._FACE_STUDIO_BLURRING:
-            frame = self.selfieSegmentation.custom_processing(frame=frame)
+            frame = frame_results[0]
+            
         if self._FACE_STUDIO_GRAY:
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
             frame = cv2.merge([frame, frame, frame])
 
         return frame
-
 
 # =============================================================================
 # FUNCTIONS - FUNCTIONS - FUNCTIONS - FUNCTIONS - FUNCTIONS  - FUNCTIONS - FUNC

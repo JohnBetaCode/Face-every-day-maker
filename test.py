@@ -27,9 +27,8 @@ if __name__ == '__main__':
     # cv2.waitKey(0)
 
 
-    fpsMetric = FPSmetric()
     mpFaceDetector = MPFaceDetection() 
-    selfieSegmentation = Engine(image_path='/workspace/image.png', show=True, custom_objects=[mpFaceDetector, fpsMetric])
+    selfieSegmentation = Engine(image_path='/workspace/image.png', show=True, custom_objects=[mpFaceDetector])
     selfieSegmentation.run()
 
     # -----------------------------

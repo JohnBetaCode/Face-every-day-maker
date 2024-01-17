@@ -1,7 +1,7 @@
 # Please define here your enviroment variables and follow the docstrings and style
 
 # ----------------------------------------------------------------------------------------------------------------------
-export DEBUG_LEVEL=1                        # [int]: 0 - debug, 1 - info, 2 - warning, 3 - error, 4 - faltal
+export DEBUG_LEVEL=0                        # [int]: 0 - debug, 1 - info, 2 - warning, 3 - error, 4 - faltal
 export PRINT_IMG_INFO=0                     # [bool]: Enable/Disable image information printing in the prompt
 export MEDIA_PATH="/workspace/dev_ws/media" # [string]: path to media folder
 
