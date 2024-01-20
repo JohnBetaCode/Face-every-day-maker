@@ -100,6 +100,7 @@ class Image(File):
         @param print_info 'bool' print image information
         to the std output
         """
+
         self.image = cv2.imread(self.path)
         if print_info:
             print(self)

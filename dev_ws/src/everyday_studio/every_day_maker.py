@@ -198,6 +198,7 @@ class Studio:
 
         # Other constant and variables
         self._MEDIA_PATH = os.getenv("MEDIA_PATH")
+        self._AUDIO_PATH = os.getenv("AUDIO_PATH")
 
         # ---------------------------------------------------------------------s
         # Face studio for operations
@@ -205,7 +206,7 @@ class Studio:
 
         # ---------------------------------------------------------------------
         # instance dataset detector object
-        self.dataset = DataSet(path=os.path.join(self._MEDIA_PATH, "images"))
+        self.dataset = DataSet(path=self._MEDIA_PATH)
 
         # ---------------------------------------------------------------------
         # Video Writer Object
@@ -357,11 +358,7 @@ class Studio:
         printlog(msg="starting video recorder ...", msg_type="WARN")
 
         # record every frame or video
-        iterator = (
-            tqdm(range(len(self.dataset.data_values)))
-            if self._DEBUG_LEVEL >= 3
-            else range(len(self.dataset.data_values))
-        )
+        iterator = tqdm(range(len(self.dataset.data_values)))
         for idx_data in iterator:
             try:
                 # go to index
@@ -369,7 +366,7 @@ class Studio:
 
                 # Check that the current sample has data
                 if self.dataset.idx_img is not None and self.dataset.idx_img.isfile:
-                    printlog(msg=self.dataset.idx_img.name, msg_type="DEBUG")
+                    # printlog(msg=self.dataset.idx_img.name, msg_type="DEBUG")
 
                     # get current idx dataset image
                     idx_img = self.dataset.idx_img.get_data(
@@ -393,15 +390,8 @@ class Studio:
                 continue
 
             if self._VIDEO_EXPORT_DATE:
-                idx_img = print_text_list(
-                    img=idx_img,
-                    tex_list=[str(self.dataset.idx_img.modified_date)],
-                    color=(255, 255, 255),
-                    orig=(10, 25),
-                    fontScale=0.5,
-                    y_jump=23,
-                )
-
+                pass
+            
             # Write image to video capture
             self._video_capture.write(img=idx_img)
 
@@ -431,7 +421,7 @@ class Studio:
         # concatenate audio
         audio_src = os.getenv("AUDIO_TRACK", default=None)
         if record_audio and audio_src is not None:
-            audio_src_path = os.path.join(self._MEDIA_PATH, "sound", audio_src)
+            audio_src_path = os.path.join(self._AUDIO_PATH, audio_src)
             if os.path.isfile(audio_src_path):
                 printlog(msg="Adding audio to video ...", msg_type="INFO")
                 merge_audio_command = "ffmpeg -hide_banner -loglevel panic -y -i {src_path} -i {audio_src} -af apad -map 0:v -map 1:a -c:v copy -shortest {dst_path}".format(
