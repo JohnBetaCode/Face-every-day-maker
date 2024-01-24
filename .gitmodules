@@ -1,3 +1,7 @@
 [submodule "dev_ws/src/background_removal"]
 	path = dev_ws/src/background_removal
 	url = https://github.com/JohnBetaCode/background_removal.git
+	branch = everyday
+[submodule "dev_ws/src/dev_ws/src/background_removal"]
+	path = dev_ws/src/dev_ws/src/background_removal
+	url = https://github.com/JohnBetaCode/background_removal.git
