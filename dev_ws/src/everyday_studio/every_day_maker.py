@@ -53,7 +53,9 @@ class DataSet:
                 self.idx += 1
                 self.goto_idx(idx=self.idx, print_info=self._PRINT_IMG_INFO)
             else:
-                printlog(msg="idx exceed limit", msg_type="WARN")
+                # printlog(msg="idx exceed limit", msg_type="WARN")
+                self.idx = 0
+                self.goto_idx(idx=self.idx, print_info=self._PRINT_IMG_INFO)
         else:
             printlog(msg="No dataset loaded", msg_type="WARN")
 
@@ -67,7 +69,10 @@ class DataSet:
                 self.idx -= 1
                 self.goto_idx(idx=self.idx, print_info=self._PRINT_IMG_INFO)
             else:
-                printlog(msg="minimum idx limit", msg_type="WARN")
+                # printlog(msg="minimum idx limit", msg_type="WARN")
+                self.idx = len(self.data_values) - 1
+                self.goto_idx(idx=self.idx, print_info=self._PRINT_IMG_INFO)
+                
         else:
             printlog(msg="No dataset loaded", msg_type="WARN")
 
@@ -309,9 +314,9 @@ class Studio:
                 # Check that the current sample has data
                 if self.dataset.idx_img is not None and self.dataset.idx_img.isfile:
                     # get current idx dataset image
-                    idx_img = self.dataset.idx_img.get_data(
-                        size=(self._VIDEO_WIDTH, self._VIDEO_HEIGHT)
-                    )
+                    idx_img = self.dataset.idx_img.get_data()
+                    idx_img = self.adjust_aspect_ratio(img=idx_img)
+                    
                     idx_img = self.face_studio.process(frame=idx_img)
 
                 else:
@@ -323,13 +328,9 @@ class Studio:
                 printlog(msg=e, msg_type="ERROR")
                 idx_img = np.zeros((self._VIDEO_WIDTH, self._VIDEO_HEIGHT, 3), np.uint8)
 
+            idx_img = self.draw_utils(img=idx_img)
             cv2.imshow(
-                self._WIN_NAME,
-                cv2.resize(
-                    idx_img,
-                    (self._WIN_WIDTH, self._WIN_HEIGHT),
-                    int(cv2.INTER_NEAREST),
-                ),
+                self._WIN_NAME, idx_img,
             )
             self.cb_key_event(key=cv2.waitKeyEx(self._WIN_TIME))
 
@@ -441,6 +442,61 @@ class Studio:
 
         # return to the previous index
         self.dataset.goto_idx(idx=current_idx)
+
+    def draw_utils(self, img):
+        
+        _str = f"{self.dataset.idx+1}/{len(self.dataset.data_values)}: {self.dataset.idx_img.name_date} - {self.dataset.idx_img.name}"
+
+        # Get image dimensions
+        height, width = img.shape[:2]
+
+        # Calculate font scale
+        # Here we use a simple proportion of the image width to adjust the font size
+        font_scale = width / 1000.0  # Adjust the denominator to control the text size
+
+        # Specify the font type
+        font = cv2.FONT_HERSHEY_SIMPLEX
+
+        # Position of the text (top-left corner)
+        text_position = (10, int(30 * font_scale))  # Adjust the position based on font scale
+
+        # Specify font color and thickness
+        font_color = (0, 0, 255)  # White color
+        thickness = int(3 * font_scale)  # Adjust thickness based on font scale
+
+        # Print text on the image
+        cv2.putText(img, _str, text_position, font, font_scale, (255, 255, 255) , thickness+1)
+        cv2.putText(img, _str, text_position, font, font_scale, font_color, thickness)
+
+        return img
+
+    def adjust_aspect_ratio(self, img):
+        
+                # Get the image dimensions
+        height, width = img.shape[:2]
+        
+        # Calculate the scale factor while keeping the aspect ratio
+        scale = min(self._VIDEO_WIDTH / width, self._VIDEO_HEIGHT / height)
+        
+        # Calculate the new dimensions
+        new_width = int(width * scale)
+        new_height = int(height * scale)
+        
+        # Resize the image
+        resized_image = cv2.resize(img, (new_width, new_height))
+        
+        # Create a blank canvas
+        canvas = np.zeros((self._VIDEO_HEIGHT, self._VIDEO_WIDTH, 3), dtype=np.uint8)
+        
+        # Calculate the position to center the image on the canvas
+        x_center = (self._VIDEO_WIDTH - new_width) // 2
+        y_center = (self._VIDEO_HEIGHT - new_height) // 2
+        
+        # Place the resized image onto the canvas
+        canvas[y_center:y_center+new_height, x_center:x_center+new_width] = resized_image
+        
+        return canvas
+        
 
     @property
     def shortcuts(self) -> str:

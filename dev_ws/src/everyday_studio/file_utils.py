@@ -9,6 +9,7 @@ Aka: @JohnBetaCode
 from python_utils import printlog, try_catch_log
 import os
 from datetime import datetime
+from datetime import date
 
 import cv2
 
@@ -67,7 +68,23 @@ class File(object):
         return (
             datetime.fromtimestamp(os.path.getmtime(self.path)) if self.isfile else None
         )
+        
+    @property
+    def name_date(self):
+        """!
+        @return _ 'name' file's date name based on name
+        """
+        
+        if self.name.count("-") == 2:
+            year, month, day = self.name.split("-")
+            return date(int(year), int(month), int(day))
+        elif self.name.count("-") == 3:
+            year, month, day, idx = self.name.split("-")
+            return date(int(year), int(month), int(day))
+        else:
+            return "Invalid Name"
 
+        
     @property
     def modified_date_stamp(self) -> float:
         """!
@@ -102,6 +119,7 @@ class Image(File):
         """
 
         self.image = cv2.imread(self.path)
+        
         if print_info:
             print(self)
 
@@ -126,7 +144,7 @@ class Image(File):
         """
         return self.image.shape[2] if self.image is not None else 0
 
-    def get_data(self, size: tuple = ()):
+    def get_data(self):
         """!
         Get image data
         @param size 'tuple' new size to give image data
@@ -138,10 +156,8 @@ class Image(File):
         elif self.image is None:
             printlog(msg=f"not data loaded yet from {self.name}", msg_type="ERROR")
             return None
-        elif not len(size):
-            return self.image
-        else:
-            return cv2.resize(src=self.image, dsize=size)
+
+        return self.image
 
     def __str__(self):
         """!
