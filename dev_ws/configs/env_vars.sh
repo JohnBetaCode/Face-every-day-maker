@@ -2,7 +2,7 @@
 
 # ----------------------------------------------------------------------------------------------------------------------
 export DEBUG_LEVEL=0                        # [int]: 0 - debug, 1 - info, 2 - warning, 3 - error, 4 - faltal
-export PRINT_IMG_INFO=0                     # [bool]: Enable/Disable image information printing in the prompt
+export PRINT_IMG_INFO=1                     # [bool]: Enable/Disable image information printing in the prompt
 export MEDIA_PATH="/workspace/dev_ws/media/images" # [string]: path to media folder
 export AUDIO_PATH="/workspace/dev_ws/media/sound"  # [string]: path to audio media folder
 

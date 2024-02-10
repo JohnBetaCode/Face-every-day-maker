@@ -72,7 +72,7 @@ class DataSet:
                 # printlog(msg="minimum idx limit", msg_type="WARN")
                 self.idx = len(self.data_values) - 1
                 self.goto_idx(idx=self.idx, print_info=self._PRINT_IMG_INFO)
-                
+
         else:
             printlog(msg="No dataset loaded", msg_type="WARN")
 
@@ -134,9 +134,28 @@ class DataSet:
         ]
 
         # order list by timestamp of time creation
-        self.data_values = sorted(
-            self.data_values, key=operator.attrgetter("modified_date_stamp")
-        )
+        try:
+            self.data_values = sorted(
+                self.data_values, key=operator.attrgetter("name_date")
+            )
+        except AttributeError as e:
+            printlog(
+                msg=f"An AttributeError occurred while organizing files: {e}",
+                msg_type="ERROR",
+            )
+            # Handle the exception (e.g., log it, use a default value, etc.)
+        except TypeError as e:
+            print(
+                msg=f"A TypeError occurred while organizing files: {e}",
+                msg_type="ERROR",
+            )
+            # Handle the exception (e.g., log it, use a default value, etc.)
+        except Exception as e:
+            print(
+                msg=f"An unexpected error occurred while organizing files: {e}",
+                msg_type="ERROR",
+            )
+            # Handle any unexpected exceptions
 
         # go to the first index of the dataset
         if len(self.data_values):
@@ -316,7 +335,6 @@ class Studio:
                     # get current idx dataset image
                     idx_img = self.dataset.idx_img.get_data()
                     idx_img = self.adjust_aspect_ratio(img=idx_img)
-                    
                     idx_img = self.face_studio.process(frame=idx_img)
 
                 else:
@@ -326,11 +344,15 @@ class Studio:
 
             except Exception as e:
                 printlog(msg=e, msg_type="ERROR")
-                idx_img = np.zeros((self._VIDEO_WIDTH, self._VIDEO_HEIGHT, 3), np.uint8)
+                if idx_img is None:
+                    idx_img = np.zeros(
+                        (self._VIDEO_HEIGHT, self._VIDEO_WIDTH, 3), np.uint8
+                    )
 
             idx_img = self.draw_utils(img=idx_img)
             cv2.imshow(
-                self._WIN_NAME, idx_img,
+                self._WIN_NAME,
+                idx_img,
             )
             self.cb_key_event(key=cv2.waitKeyEx(self._WIN_TIME))
 
@@ -392,7 +414,7 @@ class Studio:
 
             if self._VIDEO_EXPORT_DATE:
                 pass
-            
+
             # Write image to video capture
             self._video_capture.write(img=idx_img)
 
@@ -444,7 +466,6 @@ class Studio:
         self.dataset.goto_idx(idx=current_idx)
 
     def draw_utils(self, img):
-        
         _str = f"{self.dataset.idx+1}/{len(self.dataset.data_values)}: {self.dataset.idx_img.name_date} - {self.dataset.idx_img.name}"
 
         # Get image dimensions
@@ -458,45 +479,50 @@ class Studio:
         font = cv2.FONT_HERSHEY_SIMPLEX
 
         # Position of the text (top-left corner)
-        text_position = (10, int(30 * font_scale))  # Adjust the position based on font scale
+        text_position = (
+            10,
+            int(30 * font_scale),
+        )  # Adjust the position based on font scale
 
         # Specify font color and thickness
         font_color = (0, 0, 255)  # White color
         thickness = int(3 * font_scale)  # Adjust thickness based on font scale
 
         # Print text on the image
-        cv2.putText(img, _str, text_position, font, font_scale, (255, 255, 255) , thickness+1)
+        cv2.putText(
+            img, _str, text_position, font, font_scale, (255, 255, 255), thickness + 1
+        )
         cv2.putText(img, _str, text_position, font, font_scale, font_color, thickness)
 
         return img
 
     def adjust_aspect_ratio(self, img):
-        
-                # Get the image dimensions
+        # Get the image dimensions
         height, width = img.shape[:2]
-        
+
         # Calculate the scale factor while keeping the aspect ratio
         scale = min(self._VIDEO_WIDTH / width, self._VIDEO_HEIGHT / height)
-        
+
         # Calculate the new dimensions
         new_width = int(width * scale)
         new_height = int(height * scale)
-        
+
         # Resize the image
         resized_image = cv2.resize(img, (new_width, new_height))
-        
+
         # Create a blank canvas
         canvas = np.zeros((self._VIDEO_HEIGHT, self._VIDEO_WIDTH, 3), dtype=np.uint8)
-        
+
         # Calculate the position to center the image on the canvas
         x_center = (self._VIDEO_WIDTH - new_width) // 2
         y_center = (self._VIDEO_HEIGHT - new_height) // 2
-        
+
         # Place the resized image onto the canvas
-        canvas[y_center:y_center+new_height, x_center:x_center+new_width] = resized_image
-        
+        canvas[
+            y_center : y_center + new_height, x_center : x_center + new_width
+        ] = resized_image
+
         return canvas
-        
 
     @property
     def shortcuts(self) -> str:

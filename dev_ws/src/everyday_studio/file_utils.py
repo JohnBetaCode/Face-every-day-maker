@@ -68,23 +68,23 @@ class File(object):
         return (
             datetime.fromtimestamp(os.path.getmtime(self.path)) if self.isfile else None
         )
-        
+
     @property
     def name_date(self):
         """!
         @return _ 'name' file's date name based on name
         """
-        
+
         if self.name.count("-") == 2:
             year, month, day = self.name.split("-")
-            return date(int(year), int(month), int(day))
+            _date = date(int(year), int(month), int(day))
         elif self.name.count("-") == 3:
             year, month, day, idx = self.name.split("-")
-            return date(int(year), int(month), int(day))
+            _date = date(int(year), int(month), int(day))
         else:
-            return "Invalid Name"
+            _date = "Invalid Name"
+        return _date
 
-        
     @property
     def modified_date_stamp(self) -> float:
         """!
@@ -119,7 +119,7 @@ class Image(File):
         """
 
         self.image = cv2.imread(self.path)
-        
+
         if print_info:
             print(self)
 

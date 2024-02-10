@@ -17,6 +17,7 @@ from faceDetection import MPFaceDetection
 from engine import Engine
 import cv2
 import copy
+from python_utils import printlog
 
 
 # =============================================================================
@@ -34,7 +35,7 @@ class FaceStudio:
         self._FACE_STUDIO_GRAY = int(os.getenv("FACE_STUDIO_GRAY", default=1))
 
         self.FaceSegmentation = Engine(
-            show=False, 
+            show=False,
             custom_objects=[
                 MPSegmentation(
                     threshold=self._FACE_STUDIO_BLURRING_THRESH,
@@ -43,17 +44,26 @@ class FaceStudio:
                         self._FACE_STUDIO_BLURRING_RATIO,
                         self._FACE_STUDIO_BLURRING_RATIO,
                     ),
-                ), 
-                MPFaceDetection() , 
-            ]
+                ),
+                MPFaceDetection(),
+            ],
         )
 
     def process(self, frame):
-
         frame_results = self.FaceSegmentation.custom_processing(frame=copy.copy(frame))
-        
-        cv2.imshow("debug", self.draw_face_detection(frame=copy.copy(frame), detection=frame_results["MPFaceDetection"][0]))
-        
+
+        if not len(frame_results["MPFaceDetection"]):
+            printlog(msg="No faces detected in frame", msg_type="WARN")
+        elif len(frame_results["MPFaceDetection"]) > 1:
+            printlog(msg="More than one face detected in frame", msg_type="WARN")
+
+        cv2.imshow(
+            "debug",
+            self.draw_face_detection(
+                frame=copy.copy(frame), detections=frame_results["MPFaceDetection"]
+            ),
+        )
+
         if self._FACE_STUDIO_BLURRING:
             frame = frame_results["MPSegmentation"]
         if self._FACE_STUDIO_GRAY:
@@ -62,28 +72,29 @@ class FaceStudio:
 
         return frame
 
-    def draw_face_detection(self, frame, detection):
-
+    def draw_face_detection(self, frame, detections):
         h, w, _ = frame.shape  # Get the height and width of the image
 
-        # Extract bounding box coordinates
-        xmin = int(detection['relative_bounding_box']['xmin'] * w)
-        ymin = int(detection['relative_bounding_box']['ymin'] * h)
-        width = int(detection['relative_bounding_box']['width'] * w)
-        height = int(detection['relative_bounding_box']['height'] * h)
+        for detection in detections:
+            # Extract bounding box coordinates
+            xmin = int(detection["relative_bounding_box"]["xmin"] * w)
+            ymin = int(detection["relative_bounding_box"]["ymin"] * h)
+            width = int(detection["relative_bounding_box"]["width"] * w)
+            height = int(detection["relative_bounding_box"]["height"] * h)
 
-        # Draw bounding box in green
-        top_left = (xmin, ymin)
-        bottom_right = (xmin + width, ymin + height)
-        cv2.rectangle(frame, top_left, bottom_right, (0, 255, 0), 2)
+            # Draw bounding box in green
+            top_left = (xmin, ymin)
+            bottom_right = (xmin + width, ymin + height)
+            cv2.rectangle(frame, top_left, bottom_right, (0, 255, 0), 2)
 
-        # Draw keypoints in red
-        for idx, point in enumerate(detection['relative_keypoints']):
-            x = int(point['x'] * w)
-            y = int(point['y'] * h)
-            cv2.circle(frame, (x, y), 2, (0, 0, 255), -1)
+            # Draw keypoints in red
+            for idx, point in enumerate(detection["relative_keypoints"]):
+                x = int(point["x"] * w)
+                y = int(point["y"] * h)
+                cv2.circle(frame, (x, y), 2, (0, 0, 255), -1)
 
         return frame
+
 
 # =============================================================================
 # FUNCTIONS - FUNCTIONS - FUNCTIONS - FUNCTIONS - FUNCTIONS  - FUNCTIONS - FUNC
