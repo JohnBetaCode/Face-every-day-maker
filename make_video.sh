@@ -3,7 +3,8 @@
 clear
 
 echo  "Checking black python format"
-python3 -m black /workspace/dev_ws/src/ --check --exclude="background_removal" || true
+# python3 -m black /workspace/dev_ws/src/ --check --exclude="background_removal" || true
+python3 -m black /workspace/dev_ws/src/ --exclude="background_removal" || true
 echo  " "
 
 #  ----------------------------------------------------------------------

@@ -13,6 +13,12 @@ export FACE_STUDIO_BLURRING_THRESH=0.6  # [float]: Blurring threshold
 export FACE_STUDIO_BLURRING_RATIO=99    # [int]: Blurring ratio 
 export FACE_STUDIO_GRAY=1               # [bool]: Enable/Disable gray color space
 
+export FACE_STUDIO_DEBUG_WINDOW=0       # [bool]: Enable/Disable debuging window show to draw components
+
+# For face correction
+export FACE_CORRECT_RATIO=1             # [bool]: Enable/Disable face aspect ratio correction
+export FACE_CORRECT_RATIO_FACTOR=0.4    # [float]: Correct face ratio factor after centralization
+
 # ----------------------------------------------------------------------------------------------------------------------
 # Window parameters
 export WIN_NAME="every_day_studio"  # [string]: studio window name

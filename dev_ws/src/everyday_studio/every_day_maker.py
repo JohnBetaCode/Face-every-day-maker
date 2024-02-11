@@ -186,10 +186,26 @@ class DataSet:
 
     @property
     def sub_folders_name(self) -> list:
+        """
+        Retrieves the names of all sub-folders in the dataset.
+
+        This property accesses the `data_files` dictionary, which holds the dataset's sub-folder names as keys and the files within those sub-folders as values. If the dataset has been loaded and sub-folders are present, it returns a list of these sub-folder names. If the dataset is not loaded or `data_files` is None, it returns an empty list. This property offers a convenient way to obtain an overview of the dataset's structure without needing to directly interact with the `data_files` attribute.
+
+        Returns:
+            list: A list of sub-folder names within the dataset, or an empty list if the dataset is not loaded or contains no sub-folders.
+        """
         return self.data_files.keys() if self.data_files is not None else []
 
     @property
     def len(self) -> int:
+        """
+        Returns the number of items in the dataset.
+
+        This property checks if the dataset (`data_values`) is loaded and returns its length. If the dataset is not loaded or is `None`, it returns 0. This is useful for quickly assessing the size of the dataset without directly accessing the `data_values` attribute.
+
+        Returns:
+            int: The number of items in the dataset, or 0 if the dataset is not loaded.
+        """
         return len(self.data_values) if self.data_values is not None else 0
 
 
@@ -466,7 +482,31 @@ class Studio:
         self.dataset.goto_idx(idx=current_idx)
 
     def draw_utils(self, img):
-        _str = f"{self.dataset.idx+1}/{len(self.dataset.data_values)}: {self.dataset.idx_img.name_date} - {self.dataset.idx_img.name}"
+        """
+        Overlays textual information on the input image, including the current progress through the dataset,
+        the index of the current image, and the name associated with it.
+
+        The method calculates the progress as a percentage, formats a string with the current index and total number
+        of images in the dataset, as well as the date and name of the current image. This string is then drawn onto
+        the input image at a specified position with a calculated font scale to ensure visibility across different
+        image sizes.
+
+        Parameters:
+            img (numpy.ndarray): The input image on which the text is to be drawn. The image should be in a format
+                                compatible with OpenCV's `cv2.putText` method, typically height x width x channels.
+
+        Returns:
+            numpy.ndarray: The input image with the overlay text added to it.
+
+        Note:
+            - The font scale and text position are dynamically calculated based on the input image's width to accommodate
+            various image sizes while maintaining readability.
+            - The method uses `cv2.FONT_HERSHEY_SIMPLEX` for the font style and adjusts the font color and thickness
+            for better visibility.
+            - This method is particularly useful for visual debugging or for displaying progress when processing
+            a series of images.
+        """
+        _str = f"{int(100*(self.dataset.idx+1)/len(self.dataset.data_values))}% {self.dataset.idx+1}/{len(self.dataset.data_values)}: {self.dataset.idx_img.name_date} - {self.dataset.idx_img.name}"
 
         # Get image dimensions
         height, width = img.shape[:2]
@@ -497,6 +537,22 @@ class Studio:
         return img
 
     def adjust_aspect_ratio(self, img):
+        """
+        Adjusts the aspect ratio of an input image to fit within the studio's video dimensions while maintaining the original aspect ratio.
+
+        This method calculates a scale factor that ensures the resized image fits within the predefined video width and height (`_VIDEO_WIDTH` and `_VIDEO_HEIGHT`) without altering the image's aspect ratio. The resized image is then centered on a blank canvas with dimensions matching those of the video. This approach ensures that the image is displayed correctly without distortion.
+
+        Parameters:
+            img (numpy.ndarray): The input image to be resized. The image should be in the format expected by `cv2`, typically height x width x channels.
+
+        Returns:
+            numpy.ndarray: The resized image centered on a blank canvas with dimensions `_VIDEO_WIDTH` x `_VIDEO_HEIGHT`.
+
+        Note:
+            - The method assumes that `img` is a valid image array compatible with OpenCV's `cv2.resize` function.
+            - The resulting canvas is a black image with the resized input image centered within it.
+        """
+
         # Get the image dimensions
         height, width = img.shape[:2]
 
